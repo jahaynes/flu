@@ -1,0 +1,31 @@
+package view;
+
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+
+@SuppressWarnings("serial")
+public class Window extends JFrame {
+
+	public Window(String name) {
+		super(name);
+		this.prepareLayout();
+		this.attachChildren();
+		this.decorate();
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setVisible(true);
+	}
+	
+	private void prepareLayout() {
+		setLayout(new BorderLayout());
+	}
+	
+	private void attachChildren() {
+		add(new Canvas(), BorderLayout.CENTER);
+		add(new Explorer(), BorderLayout.EAST);		
+	}
+	
+	private void decorate() {
+		this.setSize(800,600);
+	}
+	
+}
