@@ -19,32 +19,32 @@ public class Explorer extends JPanel {
 	
 	private void attachChildren() {
 		this.add(new JLabel("Flow Explorer"));		
-		addSmallRigidArea(this);
+		addSmallRigidArea();
 		
 		this.add(new JLabel("Name"));
 		this.add(new JTextField());
-		addLargeRigidArea(this);
+		addLargeRigidArea();
 		
 		this.add(new JLabel("Expression"));
 		this.add(new JTextArea());
-		addSmallRigidArea(this);
+		addSmallRigidArea();
 		
 		this.add(new JLabel("Current Value"));
 		this.add(new JTextField());
-		addSmallRigidArea(this);
+		addSmallRigidArea();
 		
 		this.add(new JLabel("Stop Condition"));
 		this.add(new JTextField());
-		addLargeRigidArea(this);
+		addLargeRigidArea();
 		
 	}
 	
-	private static void addSmallRigidArea(JPanel c) {
-		c.add(Box.createRigidArea(new Dimension(0, 20)));
+	private void addSmallRigidArea() {
+		add(Box.createRigidArea(new Dimension(0, 20)));
 	}
 	
-	private static void addLargeRigidArea(JPanel c) {
-		c.add(Box.createRigidArea(new Dimension(0, 60)));
+	private void addLargeRigidArea() {
+		add(Box.createRigidArea(new Dimension(0, 60)));
 	}
 	
 	private void decorate() {
