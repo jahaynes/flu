@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Graphics;
+
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -15,4 +17,15 @@ public class Canvas extends JPanel {
 	}
 	
 
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		g.setColor(Color.red);
+		
+		g.fillOval(300, 200, 20, 30);
+		
+	}
+	
+	
 }
