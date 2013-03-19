@@ -1,15 +1,15 @@
 package main;
-import model.Stock;
+import aux.StockModelViewFactory;
 import view.Window;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		//Test data
-		Stock.createStock("CATS IN BASKET");
-		
 		new Window("flu");
+		
+		//Test data
+		StockModelViewFactory.create("CATS IN BASKET");
 	}
 
 }
