@@ -11,35 +11,34 @@ import java.util.List;
 import aux.StockModelViewFactory;
 import model.Stock;
 
-public class StockView {
+public class StockView extends Draggable {
 
 	private static final Color stockColor = new Color(232, 236, 239);
 	private static final Color textColor = new Color(56, 45, 39);
 	private static final BufferedImage backBuffer = new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY);
 		
-	private Point position;
 	private String drawName;	
 	private int width;
 	private int height;
-	
+		
 	public StockView(int stockId, String name) {
 		position = new Point(100,100);
 		setName(name);
 	}
 	
 	public void setName(String name) {
-		width = backBuffer.getGraphics().getFontMetrics().stringWidth(name) + 4;
-		height = backBuffer.getGraphics().getFontMetrics().getHeight() + 4;
+		width = backBuffer.getGraphics().getFontMetrics().stringWidth(name);
+		height = backBuffer.getGraphics().getFontMetrics().getHeight();
 		this.drawName = name;
 	}
 			
 	public void setPosition(Point position) {
 		this.position = position;
 	}
-	
+		
 	public void paint(Graphics g) {				
 		g.setColor(StockView.stockColor);
-		g.fillRect(left(), top(), width, height);		
+		g.fillRect(left(), top(), width(), height());		
 		g.setColor(StockView.textColor);
 		g.drawString(drawName, position.x, position.y);
 	}
@@ -54,9 +53,11 @@ public class StockView {
 		}
 	}
 	
-	public boolean wasClicked(Point mouseClick) {	
-		return Math.abs(mouseClick.x - position.x) < 10 
-			&& Math.abs(mouseClick.y - position.y) < 10;			
+	public boolean mouseIn(Point mouse) {	
+		return mouse.x >= left() 
+			&& mouse.x <= right()
+			&& mouse.y >= top()
+			&& mouse.y <= bottom();
 	}
 	
 	public static List<Integer> stockViewsUnderMouse(Point mouseClick) {
@@ -64,18 +65,18 @@ public class StockView {
 		Iterator<Integer> ids = Stock.getValidIds();
 		while (ids.hasNext()) {
 			Integer next = ids.next();
-			if( StockModelViewFactory.getView(next).wasClicked(mouseClick) ) {
+			if( StockModelViewFactory.getView(next).mouseIn(mouseClick) ) {
 				clicked.add(next);
 			}			
 		}
 		return clicked;
 	}
 	
-	private int left() {
+	public int left() {
 		return position.x - 2;
 	}
 	
-	private int top() {
+	public int top() {
 		return position.y - 13;
 	}
 	
@@ -85,6 +86,14 @@ public class StockView {
 	
 	private int bottom() {
 		return top() + height;
+	}
+	
+	public int width() {
+		return width + 4;
+	}
+	
+	public int height() {
+		return height + 4;
 	}
 	
 	

@@ -2,9 +2,11 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 import javax.swing.JPanel;
 import aux.StockModelViewFactory;
 
@@ -12,7 +14,9 @@ import aux.StockModelViewFactory;
 public class Canvas extends JPanel {
 		
 	public Canvas() {
-		this.addMouseListener(ElementDragger.getInstance(this));
+		ElementDragger ed = ElementDragger.getInstance(this);
+		this.addMouseListener(ed);
+		this.addMouseMotionListener(ed);
 		this.decorate();
 	}
 
@@ -33,6 +37,9 @@ class ElementDragger implements MouseListener, MouseMotionListener {
 	private static ElementDragger instance = null;
 	private final Canvas owner;
 	
+	private StockView held = null;
+	private Point pressedPoint = null;
+	
 	public static synchronized ElementDragger getInstance(final Canvas owner) {
 		if(instance == null) {
 			instance = new ElementDragger(owner);
@@ -45,23 +52,43 @@ class ElementDragger implements MouseListener, MouseMotionListener {
 	}
 	
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseDragged(MouseEvent m) {
+		assert pressedPoint != null;
+		if(held != null) {
+			
+			int dx = m.getX() - pressedPoint.x;
+			int dy = m.getY() - pressedPoint.y;
+				
+			held.addToHeldPosition(dx, dy);						
+			owner.repaint(); // TODO optimise this		
+		}	
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent m) {
 		for (Integer id : StockView.stockViewsUnderMouse(m.getPoint())) {
-			StockModelViewFactory.remove(id);
+			//StockModelViewFactory.remove(id);
 		}
 		owner.repaint(); // TODO optimise this
 	}
 
+	@Override
+	public void mousePressed(MouseEvent m) {
+		held = null;
+		pressedPoint = m.getPoint();
+		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);
+		
+		if(pressedIds.size() > 0) {
+			held = StockModelViewFactory.getView(pressedIds.get(0));	
+			held.setHoldPosition();
+		}	
+	}
+	
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -73,12 +100,11 @@ class ElementDragger implements MouseListener, MouseMotionListener {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		if(held != null) {
+			//Do release event for held
+			
+			held = null;
+		}
 	}	
 }
