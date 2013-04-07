@@ -25,7 +25,6 @@ public class Explorer  {
 	
 	private ExplorerView view;
 	private int selectedStockIndex = -1;
-	private boolean editMode = false;
 	
 	private Explorer() {
 		view = new ExplorerView();
@@ -36,6 +35,7 @@ public class Explorer  {
 	}
 	
 	public void setSelectedStock(int id, boolean editMode) {
+		view.setEditMode(editMode);
 		selectedStockIndex = id;
 		view.setSelectedStock();
 		System.out.println("Selected stock: " + selectedStockIndex);
@@ -65,8 +65,16 @@ public class Explorer  {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			this.attachChildren();
 			this.setBackground(new Color(213, 221, 226));
+			this.setEditMode(false);
 		}
 		
+		public void setEditMode(boolean editMode) {
+			txtName.setEnabled(editMode);
+			txtExpr.setEnabled(editMode);
+			txtCurrentValue.setEnabled(editMode);
+			txtStopcondition.setEnabled(editMode);
+		}
+
 		private void attachChildren() {			
 			decorateAndAdd(emptyBorder, componentDimension, xAlign, new JLabel("Flow Explorer"));		
 			add(Box.createRigidArea(smallRigidArea));		

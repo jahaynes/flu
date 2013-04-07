@@ -52,7 +52,10 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		//TODO clean up
 		boolean doubleClicked = m.getClickCount() == 2;
 		held = null;
-		List<Integer> pressedIds = StockView.stockViewsUnderMouse(m.getPoint());
+		
+		pressedPoint = m.getPoint();
+		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);
+		
 		if(pressedIds.size() > 0) {
 			Integer firstPressed = pressedIds.get(0);
 			Explorer.getInstance().setSelectedStock(firstPressed, doubleClicked);	
@@ -68,9 +71,13 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);
 		
 		if(pressedIds.size() > 0) {
-			held = StockModelViewFactory.getView(pressedIds.get(0));	
+			Integer firstPressed = pressedIds.get(0);
+			held = StockModelViewFactory.getView(firstPressed);	
 			held.setHoldPosition();
-		}	
+			Explorer.getInstance().setSelectedStock(firstPressed, false);
+		} else {
+			Explorer.getInstance().clearSelected();
+		}
 	}
 	
 	@Override
