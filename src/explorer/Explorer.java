@@ -1,18 +1,25 @@
 package explorer;
 
+import helper.StockModelViewFactory;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import stock.Stock;
-import helper.StockModelViewFactory;
 
-@SuppressWarnings("serial")
+import stock.Stock;
+import view.Canvas;
+
 public class Explorer  {
 
 	private static Explorer instance = null;
@@ -46,6 +53,7 @@ public class Explorer  {
 		view.clearSelected();
 	}
 	
+	@SuppressWarnings("serial")
 	class ExplorerView extends JPanel {
 		
 		/* Layout */
@@ -93,7 +101,12 @@ public class Explorer  {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					System.out.println(arg0.toString());
-					StockModelViewFactory.tryConfirmName(selectedStockIndex, txtName.getText());
+					boolean nameWasAcceptable = StockModelViewFactory.tryConfirmName(selectedStockIndex, txtName.getText());
+					if (nameWasAcceptable) { 
+						Canvas.getInstance().repaint();
+					} else {
+						//TODO some negative feedback
+					}
 				}
 			});
 			decorateAndAdd(emptyBorder, componentDimension, xAlign, new JLabel("Name"), txtName);
@@ -150,6 +163,5 @@ public class Explorer  {
 			this.txtCurrentValue.setText(null);
 			this.txtStopcondition.setText(null);
 		}
-		
 	}
 }

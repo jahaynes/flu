@@ -2,11 +2,10 @@ package view;
 
 import javax.swing.JFrame;
 
+import view.keyboard.Keyboard;
 import explorer.Explorer;
-
-
-
 import java.awt.BorderLayout;
+import java.awt.KeyboardFocusManager;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame {
@@ -15,8 +14,9 @@ public class Window extends JFrame {
 		super(name);
 		this.prepareLayout();
 		this.attachChildren();
-		this.decorate();
+		this.decorate();		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new Keyboard());
 		this.setVisible(true);
 	}
 	
@@ -34,5 +34,4 @@ public class Window extends JFrame {
 	private void decorate() {
 		this.setSize(800,600);
 	}
-	
 }

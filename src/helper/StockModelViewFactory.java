@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
-
 import stock.Stock;
 import stock.StockView;
-import view.Canvas;
 
 public class StockModelViewFactory{
 	
@@ -67,13 +65,14 @@ public class StockModelViewFactory{
 		freeIds.add(id);
 	}
 
-	public static void tryConfirmName(Integer id, String name) {
+	public static boolean tryConfirmName(Integer id, String name) {	
 		String trimmedName = name.trim();
-		if(isNameAcceptable(trimmedName)) {
+		boolean nameIsAcceptable = isNameAcceptable(trimmedName);
+		if(nameIsAcceptable) {
 			allStocks.get(id).setName(trimmedName);
-			allViews.get(id).setName(trimmedName);
-			allViews.get(id).paint(Canvas.getInstance().getGraphics());
-		} 	
+			allViews.get(id).setName(trimmedName);	
+		}		
+		return nameIsAcceptable;
 	}
 		
 	private static boolean isNameAcceptable(String name) {

@@ -8,6 +8,7 @@ import java.util.List;
 import explorer.Explorer;
 import stock.StockView;
 import view.Canvas;
+import view.keyboard.Keyboard;
 import helper.StockModelViewFactory;
 
 public class ElementDragger implements MouseListener, MouseMotionListener {
@@ -66,6 +67,18 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mousePressed(MouseEvent m) {
+		if(Keyboard.isCtrlDown()) {
+			doConnection(m);
+		} else {
+			doDrag(m);			
+		}	
+	}
+	
+	private void doConnection(MouseEvent m) {
+		
+	}
+	
+	private void doDrag(MouseEvent m) {
 		held = null;
 		pressedPoint = m.getPoint();
 		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);

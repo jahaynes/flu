@@ -1,21 +1,20 @@
 package stock;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import decorations.Colours;
 import view.Draggable;
 import helper.StockModelViewFactory;
 
 public class StockView extends Draggable {
-
-	private static final Color stockColor = new Color(232, 236, 239);
-	private static final Color textColor = new Color(56, 45, 39);
-	private static final BufferedImage backBuffer = new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY);
 		
+	private static final BufferedImage backBuffer = new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY);
+	
 	private String drawName;	
 	private int width;
 	private int height;
@@ -36,9 +35,9 @@ public class StockView extends Draggable {
 	}
 		
 	public void paint(Graphics g) {				
-		g.setColor(StockView.stockColor);
+		g.setColor(Colours.stockColor);
 		g.fillRect(left(), top(), width(), height());		
-		g.setColor(StockView.textColor);
+		g.setColor(Colours.textColor);
 		g.drawString(drawName, position.x, position.y);
 	}
 	
