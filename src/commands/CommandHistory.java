@@ -1,6 +1,10 @@
 package commands;
 
+import helper.StockModelViewFactory;
+
 import java.util.Stack;
+
+import view.Canvas;
 
 public class CommandHistory  {
 
@@ -18,5 +22,16 @@ public class CommandHistory  {
 		if(! history.isEmpty()) {
 			history.pop().rollback();
 		}
+	}
+
+	public void changeStockName(int stockId, String newName) {	
+		String trimmedName = newName.trim();
+		if (StockModelViewFactory.isNameAcceptable(trimmedName)) {
+			Command changeName = new NameChangeCommand(
+					stockId, 
+					newName);
+			changeName.execute();
+			history.push(changeName);
+		}	
 	}
 }

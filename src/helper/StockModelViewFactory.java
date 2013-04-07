@@ -64,19 +64,9 @@ public class StockModelViewFactory{
 		usedIds.remove(id);
 		freeIds.add(id);
 	}
-
-	public static boolean tryConfirmName(Integer id, String name) {	
-		String trimmedName = name.trim();
-		boolean nameIsAcceptable = isNameAcceptable(trimmedName);
-		if(nameIsAcceptable) {
-			allStocks.get(id).setName(trimmedName);
-			allViews.get(id).setName(trimmedName);	
-		}		
-		return nameIsAcceptable;
-	}
-		
-	private static boolean isNameAcceptable(String name) {
-		//For now, just check the name doesnt already exist
+	
+	public static boolean isNameAcceptable(String name) {
+		//For now, just check the name doesn't already exist
 		for(Stock s : allStocks) {
 			if(s.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;

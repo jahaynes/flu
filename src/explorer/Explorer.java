@@ -17,6 +17,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 
+import commands.CommandHistory;
+
 import stock.Stock;
 import view.Canvas;
 
@@ -100,13 +102,7 @@ public class Explorer  {
 			txtName.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					System.out.println(arg0.toString());
-					boolean nameWasAcceptable = StockModelViewFactory.tryConfirmName(selectedStockIndex, txtName.getText());
-					if (nameWasAcceptable) { 
-						Canvas.getInstance().repaint();
-					} else {
-						//TODO some negative feedback
-					}
+					CommandHistory.getInstance().changeStockName(selectedStockIndex, txtName.getText());
 				}
 			});
 			decorateAndAdd(emptyBorder, componentDimension, xAlign, new JLabel("Name"), txtName);
