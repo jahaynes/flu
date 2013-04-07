@@ -7,8 +7,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import model.Stock;
-import view.StockView;
+import stock.Stock;
+import stock.StockView;
+import view.Canvas;
 
 public class StockModelViewFactory{
 	
@@ -66,21 +67,12 @@ public class StockModelViewFactory{
 		freeIds.add(id);
 	}
 
-	public static void previewName(Integer id, String name) {
-		allViews.get(id).setName(name);
-	}
-		
-	public static void rollBackAllNames() {
-		for(Integer id : usedIds) {
-			allViews.get(id).setName(allStocks.get(id).getName());
-		}
-	}
-	
 	public static void tryConfirmName(Integer id, String name) {
 		String trimmedName = name.trim();
 		if(isNameAcceptable(trimmedName)) {
 			allStocks.get(id).setName(trimmedName);
 			allViews.get(id).setName(trimmedName);
+			allViews.get(id).paint(Canvas.getInstance().getGraphics());
 		} 	
 	}
 		

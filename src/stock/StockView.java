@@ -1,4 +1,4 @@
-package view;
+package stock;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import view.Draggable;
 import helper.StockModelViewFactory;
-import model.Stock;
 
 public class StockView extends Draggable {
 
@@ -42,10 +42,8 @@ public class StockView extends Draggable {
 		g.drawString(drawName, position.x, position.y);
 	}
 	
-	public static void paintAll(Graphics g) {
-		
+	public static void paintAll(Graphics g) {	
 		Iterator<Integer> ids = Stock.getValidIds();
-		
 		while (ids.hasNext()) {
 			int id = ids.next();
 			StockModelViewFactory.getView(id).paint(g);	

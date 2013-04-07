@@ -1,6 +1,11 @@
 package view;
 
 import javax.swing.JFrame;
+
+import explorer.Explorer;
+
+
+
 import java.awt.BorderLayout;
 
 @SuppressWarnings("serial")
@@ -21,7 +26,7 @@ public class Window extends JFrame {
 	
 	private void attachChildren() {
 		add(new Menu(), BorderLayout.NORTH);
-		add(new Canvas(), BorderLayout.CENTER);
+		add(Canvas.getInstance(), BorderLayout.CENTER);
 		add(Explorer.getInstance().getView(), BorderLayout.EAST);	
 		add(new ControlBar(), BorderLayout.SOUTH);
 	}

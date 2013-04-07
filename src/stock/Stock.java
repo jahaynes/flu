@@ -1,4 +1,4 @@
-package model;
+package stock;
 
 import java.util.*;
 import helper.StockModelViewFactory;

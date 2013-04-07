@@ -1,12 +1,15 @@
-package view;
+package explorer;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import stock.Stock;
 import helper.StockModelViewFactory;
 
 @SuppressWarnings("serial")
@@ -22,6 +25,7 @@ public class Explorer  {
 	
 	private ExplorerView view;
 	private int selectedStockIndex = -1;
+	private boolean editMode = false;
 	
 	private Explorer() {
 		view = new ExplorerView();
@@ -31,9 +35,15 @@ public class Explorer  {
 		return view;
 	}
 	
-	public void setSelectedStock(Integer id) {
+	public void setSelectedStock(int id, boolean editMode) {
 		selectedStockIndex = id;
-		System.out.println("Selected: " + selectedStockIndex);
+		view.setSelectedStock();
+		System.out.println("Selected stock: " + selectedStockIndex);
+	}
+	
+	public void clearSelected() {
+		selectedStockIndex = -1;
+		view.clearSelected();
 	}
 	
 	class ExplorerView extends JPanel {
@@ -44,6 +54,12 @@ public class Explorer  {
 		private final Dimension largeRigidArea = new Dimension(200, 40);
 		private final EmptyBorder emptyBorder = new EmptyBorder(0,0,0,0);
 		private static final float xAlign = 0.5f;
+		
+		//The controls on the right hand side.  Name, Expression, currentValue and stop condition
+		final JTextField txtName = new JTextField();	
+		final JTextArea txtExpr = new JTextArea();
+		final JTextField txtCurrentValue = new JTextField();		
+		final JTextField txtStopcondition = new JTextField();		
 		
 		public ExplorerView() {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -64,22 +80,18 @@ public class Explorer  {
 			add(Box.createRigidArea(new Dimension(0, 60)));
 		}
 		
-		private void addNameSection() {
-			final JTextField txtName = new JTextField();	
-						
-			txtName.getDocument().addUndoableEditListener(new UndoableEditListener() {
+		private void addNameSection() {					
+			txtName.addActionListener(new ActionListener() {
 				@Override
-				public void undoableEditHappened(UndoableEditEvent e) {
-					if (selectedStockIndex != -1) {
-						StockModelViewFactory.previewName(selectedStockIndex, txtName.getText());
-					}
+				public void actionPerformed(ActionEvent arg0) {
+					System.out.println(arg0.toString());
+					StockModelViewFactory.tryConfirmName(selectedStockIndex, txtName.getText());
 				}
 			});
 			decorateAndAdd(emptyBorder, componentDimension, xAlign, new JLabel("Name"), txtName);
 		}
 		
 		private void addExpressionSection() {
-			JTextArea txtExpr = new JTextArea();
 			txtExpr.getDocument().addUndoableEditListener(new UndoableEditListener() {
 				@Override
 				public void undoableEditHappened(UndoableEditEvent e) {
@@ -90,7 +102,6 @@ public class Explorer  {
 		}	
 		
 		private void addCurrentValueSection() {
-			JTextField txtCurrentValue = new JTextField();		
 			txtCurrentValue.getDocument().addUndoableEditListener(new UndoableEditListener() {
 				@Override
 				public void undoableEditHappened(UndoableEditEvent e) {
@@ -101,7 +112,6 @@ public class Explorer  {
 		}
 		
 		private void addStopConditionSection() {
-			JTextField txtStopcondition = new JTextField();		
 			txtStopcondition.getDocument().addUndoableEditListener(new UndoableEditListener() {
 				@Override
 				public void undoableEditHappened(UndoableEditEvent e) {
@@ -119,5 +129,19 @@ public class Explorer  {
 				add(c);
 			}
 		}
+		
+		public void setSelectedStock() {
+			Stock selectedStock = StockModelViewFactory.getStock(selectedStockIndex);	
+			this.txtName.setText(selectedStock.getName());
+			//this.txtExpr.setText(selectedStock.getExpression());	
+		}
+		
+		public void clearSelected() {
+			this.txtName.setText(null);
+			this.txtExpr.setText(null);
+			this.txtCurrentValue.setText(null);
+			this.txtStopcondition.setText(null);
+		}
+		
 	}
 }
