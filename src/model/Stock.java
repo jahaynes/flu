@@ -1,7 +1,7 @@
 package model;
 
 import java.util.*;
-import aux.StockModelViewFactory;
+import helper.StockModelViewFactory;
 
 public class Stock {
 		

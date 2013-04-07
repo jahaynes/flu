@@ -7,8 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import aux.StockModelViewFactory;
+import helper.StockModelViewFactory;
 import model.Stock;
 
 public class StockView extends Draggable {

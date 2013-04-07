@@ -1,5 +1,5 @@
 package main;
-import aux.StockModelViewFactory;
+import helper.StockModelViewFactory;
 import view.Window;
 
 public class Main {

@@ -7,7 +7,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import aux.StockModelViewFactory;
+import helper.StockModelViewFactory;
 
 @SuppressWarnings("serial")
 public class Explorer  {

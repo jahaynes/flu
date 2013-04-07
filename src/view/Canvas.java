@@ -8,7 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.List;
 import javax.swing.JPanel;
-import aux.StockModelViewFactory;
+import helper.StockModelViewFactory;
 
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
