@@ -60,7 +60,7 @@ class ElementDragger implements MouseListener, MouseMotionListener {
 			int dy = m.getY() - pressedPoint.y;
 				
 			held.addToHeldPosition(dx, dy);						
-			owner.repaint(); // TODO optimise this		
+			owner.repaint(); // TODO optimize this		
 		}	
 	}
 
@@ -71,10 +71,18 @@ class ElementDragger implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent m) {
-		for (Integer id : StockView.stockViewsUnderMouse(m.getPoint())) {
-			//StockModelViewFactory.remove(id);
+		//Double click only
+		if(m.getClickCount() == 2) {
+			
+			StockModelViewFactory.rollBackAllNames();
+			
+			held = null;
+			List<Integer> pressedIds = StockView.stockViewsUnderMouse(m.getPoint());
+			
+			if(pressedIds.size() > 0) {
+				Explorer.getInstance().setSelectedStock((pressedIds.get(0)));	
+			}	
 		}
-		owner.repaint(); // TODO optimise this
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class Window extends JFrame {
 	private void attachChildren() {
 		add(new Menu(), BorderLayout.NORTH);
 		add(new Canvas(), BorderLayout.CENTER);
-		add(new Explorer(), BorderLayout.EAST);	
+		add(Explorer.getInstance().getView(), BorderLayout.EAST);	
 		add(new ControlBar(), BorderLayout.SOUTH);
 	}
 	

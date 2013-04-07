@@ -66,6 +66,28 @@ public class StockModelViewFactory{
 		freeIds.add(id);
 	}
 
+	public static void previewName(Integer id, String name) {
+		allViews.get(id).setName(name);
+	}
+		
+	public static void rollBackAllNames() {
+		for(Integer id : usedIds) {
+			allViews.get(id).setName(allStocks.get(id).getName());
+		}
+	}
+	
+	public static void tryConfirmName(Integer id, String name) {
+		String trimmedName = name.trim();
+		if(isNameAcceptable(trimmedName)) {
+			allStocks.get(id).setName(trimmedName);
+			allViews.get(id).setName(trimmedName);
+		} 	
+	}
+		
+	private static boolean isNameAcceptable(String name) {
+		return true;
+	}
+	
 	public static Iterator<Integer> getIterator() {
 		return usedIds.iterator();
 	}
