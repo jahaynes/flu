@@ -6,21 +6,24 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.List;
 import commands.CommandHistory;
+import commands.CreateConnectingInfluence;
 import commands.DuplicateStockCommand;
 import explorer.Explorer;
-import stock.StockView;
 import view.Canvas;
+import view.ElementView;
 import view.keyboard.Keyboard;
-import helper.StockModelViewFactory;
+import helper.ModelViewFactory;
 
 public class ElementDragger implements MouseListener, MouseMotionListener {
 
 	private static ElementDragger instance = null;
 	private final Canvas owner;
 	
-	private StockView held = null;
+	private ElementView held = null;
 	private Point pressedPoint = null;
 	private DragType currentDragType = DragType.NOTHING;
+	
+	private int sourceStockId;
 	
 	public static synchronized ElementDragger getInstance(final Canvas owner) {
 		if(instance == null) {
@@ -58,7 +61,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		held = null;
 		
 		pressedPoint = m.getPoint();
-		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);
+		List<Integer> pressedIds = ElementView.viewsUnderMouse(pressedPoint);
 		
 		if(pressedIds.size() > 0) {
 			Integer firstPressed = pressedIds.get(0);
@@ -67,7 +70,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			Explorer.getInstance().clearSelected();
 		}
 	}
-
+		
 	private enum DragType {
 		NOTHING,
 		MOVE,
@@ -82,12 +85,12 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		
 		held = null;
 		pressedPoint = m.getPoint();
-		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);
+		List<Integer> pressedIds = ElementView.viewsUnderMouse(pressedPoint);
 		if(pressedIds.size() > 0) {
 			int selectedInt = pressedIds.get(0);
 			if(Keyboard.isCtrlDown()) {
 				startClone(m, selectedInt);
-			} else if (Keyboard.isShiftDown()) {
+			} else if (Keyboard.isAltDown()) {
 				startConnection(m, selectedInt);
 			} else {
 				startMove(m, selectedInt);			
@@ -104,7 +107,14 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		case CLONE:
 			break;
 		case CONNECT:
-			break;
+			pressedPoint = m.getPoint();
+			List<Integer> pressedIds = ElementView.viewsUnderMouse(pressedPoint);		
+			if(pressedIds.size() > 0) {
+				Integer firstPressed = pressedIds.get(0);
+				CommandHistory.getInstance().doCommand(new CreateConnectingInfluence(sourceStockId, firstPressed));
+			} 		
+			sourceStockId = -1;
+			break;		
 		case MOVE:
 			break;
 		default:
@@ -117,31 +127,29 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	
 	private void startConnection(MouseEvent m, int selectedId) {
 		currentDragType = DragType.CONNECT;
+		sourceStockId = selectedId;		
 	}
 	
 	private void startClone(MouseEvent m, int selectedId) {	
 		currentDragType = DragType.CLONE;
 		DuplicateStockCommand command = new DuplicateStockCommand(selectedId);
-		CommandHistory.getInstance().pushCommand(command);
-		command.execute();
+		CommandHistory.getInstance().doCommand(command);
 		int newId = command.getNewId();
 		startMove(m, newId);
 	}
 	
 	private void startMove(MouseEvent m, int selectedId) {
 		currentDragType = DragType.MOVE;
-		held = StockModelViewFactory.getView(selectedId);	
+		held = ModelViewFactory.getView(selectedId);	
 		held.setHoldPosition();
 		Explorer.getInstance().setSelectedStock(selectedId, false);
 	}
 		
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 	}
 }

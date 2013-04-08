@@ -1,6 +1,6 @@
 package explorer;
 
-import helper.StockModelViewFactory;
+import helper.ModelViewFactory;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -17,7 +17,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import commands.CommandHistory;
-import stock.Stock;
 
 public class Explorer  {
 
@@ -43,7 +42,7 @@ public class Explorer  {
 	public void setSelectedStock(int id, boolean editMode) {
 		view.setEditMode(editMode);
 		selectedStockIndex = id;
-		view.setSelectedStock();
+		view.setSelected();
 		System.out.println("Selected stock: " + selectedStockIndex);
 	}
 	
@@ -148,9 +147,8 @@ public class Explorer  {
 			}
 		}
 		
-		public void setSelectedStock() {
-			Stock selectedStock = StockModelViewFactory.getStock(selectedStockIndex);	
-			this.txtName.setText(selectedStock.getName());
+		public void setSelected() {
+			this.txtName.setText(ModelViewFactory.getName(selectedStockIndex));
 			//this.txtExpr.setText(selectedStock.getExpression());	
 		}
 		

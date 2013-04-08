@@ -16,11 +16,7 @@ public class Window extends JFrame {
 		this.attachChildren();
 		this.decorate();		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-		Keyboard keyboard = new Keyboard();
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(keyboard);
-		this.addKeyListener(keyboard);
-		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new Keyboard());	
 		this.setVisible(true);
 	}
 	

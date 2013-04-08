@@ -1,6 +1,7 @@
 package commands;
 
-import helper.StockModelViewFactory;
+import helper.ModelViewFactory;
+
 import java.util.Stack;
 
 public class CommandHistory  {
@@ -15,9 +16,14 @@ public class CommandHistory  {
 		return instance;
 	}
 	
-	public void pushCommand(Command command) {
+	public void doCommand(Command command) {
+		command.execute();
 		history.push(command);
 	}
+	
+	
+	//TODO: put rollback-only stuff in here like MOVE
+	//public void alreadyDidCommand()
 	
 	public void undo() {
 		if(! history.isEmpty()) {
@@ -28,12 +34,11 @@ public class CommandHistory  {
 
 	public void changeStockName(int stockId, String newName) {	
 		String trimmedName = newName.trim();
-		if (StockModelViewFactory.isNameAcceptable(trimmedName)) {
+		if (ModelViewFactory.isNameAcceptable(trimmedName)) {
 			Command changeName = new NameChangeCommand(
 					stockId, 
 					newName);
-			changeName.execute();
-			pushCommand(changeName);
+			doCommand(changeName);
 		}	
 	}
 }

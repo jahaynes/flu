@@ -1,7 +1,7 @@
 package commands;
 
 import view.Canvas;
-import helper.StockModelViewFactory;
+import helper.ModelViewFactory;
 
 public class CreateStockCommand implements Command {
 
@@ -9,13 +9,13 @@ public class CreateStockCommand implements Command {
 	
 	@Override
 	public void execute() {
-		createdId = StockModelViewFactory.create();
+		createdId = ModelViewFactory.createStock();
 		Canvas.getInstance().repaint();
 	}
 
 	@Override
 	public void rollback() {
-		StockModelViewFactory.remove(createdId);
+		ModelViewFactory.remove(createdId);
 		Canvas.getInstance().repaint();
 	}
 	

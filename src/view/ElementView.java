@@ -1,4 +1,4 @@
-package stock;
+package view;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import stock.Stock;
 import decorations.Colours;
 import decorations.Margins;
-import view.Draggable;
-import helper.StockModelViewFactory;
+import helper.ModelViewFactory;
 
-public class StockView extends Draggable {
+public class ElementView extends Draggable {
 		
 	private static final BufferedImage backBuffer = new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY);
 	
@@ -20,7 +20,7 @@ public class StockView extends Draggable {
 	private int width;
 	private int height;
 		
-	public StockView(int stockId, String name) {
+	public ElementView(int stockId, String name) {
 		position = new Point(100,100);
 		setName(name);
 	}
@@ -46,7 +46,7 @@ public class StockView extends Draggable {
 		Iterator<Integer> ids = Stock.getValidIds();
 		while (ids.hasNext()) {
 			int id = ids.next();
-			StockModelViewFactory.getView(id).paint(g);	
+			ModelViewFactory.getView(id).paint(g);	
 		}
 	}
 	
@@ -57,12 +57,12 @@ public class StockView extends Draggable {
 			&& mouse.y <= bottom();
 	}
 	
-	public static List<Integer> stockViewsUnderMouse(Point mouseClick) {
+	public static List<Integer> viewsUnderMouse(Point mouseClick) {
 		List<Integer> clicked = new ArrayList<Integer>();
 		Iterator<Integer> ids = Stock.getValidIds();
 		while (ids.hasNext()) {
 			Integer next = ids.next();
-			if( StockModelViewFactory.getView(next).mouseIn(mouseClick) ) {
+			if( ModelViewFactory.getView(next).mouseIn(mouseClick) ) {
 				clicked.add(next);
 			}			
 		}

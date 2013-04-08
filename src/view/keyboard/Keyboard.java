@@ -3,69 +3,72 @@ package view.keyboard;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import commands.CommandHistory;
 
-public class Keyboard implements KeyEventDispatcher, KeyListener {
+public class Keyboard implements KeyEventDispatcher {
 
 	private static boolean ctrlHeld;
-	private static boolean shiftHeld;
+	private static boolean altHeld;
 		
 	public Keyboard() {
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(this);
 	}
 
+	private static void doSpecialKeyPress(KeyEvent e) {
+		
+		if(ctrlHeld && altHeld) {
+			
+		} else if (ctrlHeld) {
+			
+		} else if (altHeld){
+			
+		} else {
+			//Should not be here
+		}
+		
+		System.out.print( (ctrlHeld ? "ctrl-" : "") + (altHeld ? "alt-" : "") + new Character(e.getKeyChar()) + "\n");
+	}
+		
 	@Override
-	public boolean dispatchKeyEvent(KeyEvent e) {
+	public boolean dispatchKeyEvent(KeyEvent k) {
 		//If this was ctrl being pushed now
-		if (e.getKeyCode() == KeyEvent.VK_CONTROL) {		
-			if (e.getID() == KeyEvent.KEY_PRESSED) {
+		if (k.getKeyCode() == KeyEvent.VK_CONTROL) {		
+			if (k.getID() == KeyEvent.KEY_PRESSED) {
 				ctrlHeld = true;
-			} else if (e.getID() == KeyEvent.KEY_RELEASED) {
+			} else if (k.getID() == KeyEvent.KEY_RELEASED) {
 				ctrlHeld = false;
 			}		
 		}
 		
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {		
-			if (e.getID() == KeyEvent.KEY_PRESSED) {
-				shiftHeld = true;
-			} else if (e.getID() == KeyEvent.KEY_RELEASED) {
-				shiftHeld = false;
+		if (k.getKeyCode() == KeyEvent.VK_ALT) {		
+			if (k.getID() == KeyEvent.KEY_PRESSED) {
+				altHeld = true;
+			} else if (k.getID() == KeyEvent.KEY_RELEASED) {
+				altHeld = false;
 			}		
 		}
 		
 		//Check for UNDO (Ctrl-Z)
 		//TODO: probably could do this better than 90
-		if( ctrlHeld && e.getKeyCode() == 90 && e.getID() == KeyEvent.KEY_RELEASED) {
+		if( ctrlHeld && k.getKeyCode() == 90 && k.getID() == KeyEvent.KEY_RELEASED) {
 			CommandHistory.getInstance().undo();
 			return true;
 		}
 		
-		//If ctrl is held down, absorb this event
-		return ctrlHeld;
+		if((ctrlHeld || altHeld) && k.getID() == KeyEvent.KEY_TYPED) {
+			doSpecialKeyPress(k);
+			return true;
+		} else {
+			return false;
+		}
 	}	
 	
 	public static boolean isCtrlDown() {
 		return ctrlHeld;
 	}
 	
-	public static boolean isShiftDown() {
-		return shiftHeld;
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {	
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public static boolean isAltDown() {
+		return altHeld;
 	}
 }

@@ -1,18 +1,11 @@
-package stock;
+package influence;
 
-import java.util.*;
-import helper.ModelViewFactory;
+public class Influence {
 
-public class Stock {
-			
-	public static Iterator<Integer> getValidIds() {
-		return ModelViewFactory.getIterator();
-	}
-	
 	private String name;
 	
 	/* Simple dummy class to provide something for the GUI */
-	public Stock(String name) {
+	public Influence(String name) {
 		this.name = name;
 	}
 	
@@ -23,4 +16,6 @@ public class Stock {
 	public String getName() {
 		return name;
 	}
+	
+	
 }

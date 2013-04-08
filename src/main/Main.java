@@ -1,5 +1,5 @@
 package main;
-import helper.StockModelViewFactory;
+import helper.ModelViewFactory;
 import view.Window;
 
 public class Main {
@@ -9,9 +9,9 @@ public class Main {
 		new Window("flu");
 		
 		//Test data
-		StockModelViewFactory.create();
-		StockModelViewFactory.create();
-		StockModelViewFactory.create();
+		ModelViewFactory.createStock();
+		ModelViewFactory.createStock();
+		ModelViewFactory.createStock();
 	}
 
 }
