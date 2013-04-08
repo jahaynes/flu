@@ -71,7 +71,7 @@ public class StockModelViewFactory{
 	public static boolean isNameAcceptable(String name) {
 		//For now, just check the name doesn't already exist
 		for(Stock s : allStocks) {
-			if(s.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+			if(s != null && s.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;
 			}
 		}
