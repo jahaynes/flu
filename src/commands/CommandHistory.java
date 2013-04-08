@@ -1,10 +1,7 @@
 package commands;
 
 import helper.StockModelViewFactory;
-
 import java.util.Stack;
-
-import view.Canvas;
 
 public class CommandHistory  {
 
@@ -21,6 +18,7 @@ public class CommandHistory  {
 	public void undo() {
 		if(! history.isEmpty()) {
 			history.pop().rollback();
+			System.out.println("Rolled back");
 		}
 	}
 

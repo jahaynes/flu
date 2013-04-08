@@ -16,11 +16,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-
 import commands.CommandHistory;
-
 import stock.Stock;
-import view.Canvas;
 
 public class Explorer  {
 
@@ -48,6 +45,10 @@ public class Explorer  {
 		selectedStockIndex = id;
 		view.setSelectedStock();
 		System.out.println("Selected stock: " + selectedStockIndex);
+	}
+	
+	public int getSelected() {
+		return selectedStockIndex;
 	}
 	
 	public void clearSelected() {

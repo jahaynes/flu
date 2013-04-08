@@ -1,5 +1,6 @@
 package commands;
 
+import explorer.Explorer;
 import view.Canvas;
 import helper.StockModelViewFactory;
 
@@ -26,6 +27,12 @@ public class NameChangeCommand implements Command {
 	public void rollback() {
 		StockModelViewFactory.getStock(stockId).setName(oldName);
 		StockModelViewFactory.getView(stockId).setName(oldName);
+		
+		//If currently exploring the name-changed stock, redisplay it in non-edit mode
+		if (Explorer.getInstance().getSelected() == stockId) {
+			Explorer.getInstance().setSelectedStock(stockId, false);
+		}
+		
 		Canvas.getInstance().repaint();
 	}
 

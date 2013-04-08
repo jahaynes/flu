@@ -11,6 +11,7 @@ public class Main {
 		//Test data
 		StockModelViewFactory.create("CATS IN BASKET");
 		StockModelViewFactory.create("PUPPIES IN BASKET");
+		StockModelViewFactory.create("BLANKETS IN BASKET");
 	}
 
 }
