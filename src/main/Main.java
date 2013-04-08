@@ -9,9 +9,9 @@ public class Main {
 		new Window("flu");
 		
 		//Test data
-		StockModelViewFactory.create("CATS IN BASKET");
-		StockModelViewFactory.create("PUPPIES IN BASKET");
-		StockModelViewFactory.create("BLANKETS IN BASKET");
+		StockModelViewFactory.create();
+		StockModelViewFactory.create();
+		StockModelViewFactory.create();
 	}
 
 }

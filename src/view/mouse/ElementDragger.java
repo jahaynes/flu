@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.List;
+import commands.CommandHistory;
+import commands.DuplicateStockCommand;
 import explorer.Explorer;
 import stock.StockView;
 import view.Canvas;
@@ -18,6 +20,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	
 	private StockView held = null;
 	private Point pressedPoint = null;
+	private DragType currentDragType = DragType.NOTHING;
 	
 	public static synchronized ElementDragger getInstance(final Canvas owner) {
 		if(instance == null) {
@@ -65,34 +68,73 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	private enum DragType {
+		NOTHING,
+		MOVE,
+		CLONE,
+		CONNECT	
+	}
+	
+	//TODO: As well as checking for start-end within each ctrl/shift/normal, try mixing and matching
+	
 	@Override
 	public void mousePressed(MouseEvent m) {
-		if(Keyboard.isCtrlDown()) {
-			doConnection(m);
-		} else {
-			doDrag(m);			
-		}	
-	}
-	
-	private void doConnection(MouseEvent m) {
 		
-	}
-	
-	private void doDrag(MouseEvent m) {
 		held = null;
 		pressedPoint = m.getPoint();
 		List<Integer> pressedIds = StockView.stockViewsUnderMouse(pressedPoint);
-		
 		if(pressedIds.size() > 0) {
-			Integer firstPressed = pressedIds.get(0);
-			held = StockModelViewFactory.getView(firstPressed);	
-			held.setHoldPosition();
-			Explorer.getInstance().setSelectedStock(firstPressed, false);
+			int selectedInt = pressedIds.get(0);
+			if(Keyboard.isCtrlDown()) {
+				startClone(m, selectedInt);
+			} else if (Keyboard.isShiftDown()) {
+				startConnection(m, selectedInt);
+			} else {
+				startMove(m, selectedInt);			
+			}	
 		} else {
 			Explorer.getInstance().clearSelected();
 		}
 	}
 	
+	@Override
+	public void mouseReleased(MouseEvent m) {
+		
+		switch(currentDragType) {
+		case CLONE:
+			break;
+		case CONNECT:
+			break;
+		case MOVE:
+			break;
+		default:
+			break;	
+		}
+		
+		currentDragType = DragType.NOTHING;
+		Canvas.getInstance().repaint();
+	}	
+	
+	private void startConnection(MouseEvent m, int selectedId) {
+		currentDragType = DragType.CONNECT;
+	}
+	
+	private void startClone(MouseEvent m, int selectedId) {	
+		currentDragType = DragType.CLONE;
+		DuplicateStockCommand command = new DuplicateStockCommand(selectedId);
+		CommandHistory.getInstance().pushCommand(command);
+		command.execute();
+		int newId = command.getNewId();
+		startMove(m, newId);
+	}
+	
+	private void startMove(MouseEvent m, int selectedId) {
+		currentDragType = DragType.MOVE;
+		held = StockModelViewFactory.getView(selectedId);	
+		held.setHoldPosition();
+		Explorer.getInstance().setSelectedStock(selectedId, false);
+	}
+		
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -102,13 +144,4 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		if(held != null) {
-			//Do release event for held
-			
-			held = null;
-		}
-	}	
 }

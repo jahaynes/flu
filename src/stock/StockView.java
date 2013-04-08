@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import decorations.Colours;
+import decorations.Margins;
 import view.Draggable;
 import helper.StockModelViewFactory;
 
@@ -69,11 +70,11 @@ public class StockView extends Draggable {
 	}
 	
 	public int left() {
-		return position.x - 2;
+		return position.x + Margins.STOCKVIEWLEFTMARGIN;
 	}
 	
 	public int top() {
-		return position.y - 13;
+		return position.y +  Margins.STOCKVIEWTOPMARGIN;
 	}
 	
 	private int right() {

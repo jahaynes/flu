@@ -34,8 +34,10 @@ public class StockModelViewFactory{
 		return nextId;
 	}
 
-	public static synchronized void create(String name) {
-		final Integer nextId = consumeId();
+	public static synchronized int create() {
+		final int nextId = consumeId();
+		
+		String name = "STOCK " + nextId;
 		
 		// Expand the storage to accommodate the direct reference
 		while(allStocks.size() < nextId + 1) {
@@ -46,8 +48,9 @@ public class StockModelViewFactory{
 		allStocks.set(nextId, new Stock(name));
 		allViews.set(nextId, new StockView(nextId, name));
 		usedIds.add(nextId);
+		return nextId;
 	}
-	
+
 	public static synchronized Stock getStock(Integer id) {
 		assert usedIds.contains(id);
 		return allStocks.get(id);

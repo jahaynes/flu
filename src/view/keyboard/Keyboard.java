@@ -10,6 +10,7 @@ import commands.CommandHistory;
 public class Keyboard implements KeyEventDispatcher, KeyListener {
 
 	private static boolean ctrlHeld;
+	private static boolean shiftHeld;
 		
 	public Keyboard() {
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
@@ -27,6 +28,14 @@ public class Keyboard implements KeyEventDispatcher, KeyListener {
 			}		
 		}
 		
+		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {		
+			if (e.getID() == KeyEvent.KEY_PRESSED) {
+				shiftHeld = true;
+			} else if (e.getID() == KeyEvent.KEY_RELEASED) {
+				shiftHeld = false;
+			}		
+		}
+		
 		//Check for UNDO (Ctrl-Z)
 		//TODO: probably could do this better than 90
 		if( ctrlHeld && e.getKeyCode() == 90 && e.getID() == KeyEvent.KEY_RELEASED) {
@@ -40,6 +49,10 @@ public class Keyboard implements KeyEventDispatcher, KeyListener {
 	
 	public static boolean isCtrlDown() {
 		return ctrlHeld;
+	}
+	
+	public static boolean isShiftDown() {
+		return shiftHeld;
 	}
 
 	@Override
@@ -55,5 +68,4 @@ public class Keyboard implements KeyEventDispatcher, KeyListener {
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 	}
-	
 }

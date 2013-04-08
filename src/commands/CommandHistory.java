@@ -15,6 +15,10 @@ public class CommandHistory  {
 		return instance;
 	}
 	
+	public void pushCommand(Command command) {
+		history.push(command);
+	}
+	
 	public void undo() {
 		if(! history.isEmpty()) {
 			history.pop().rollback();
@@ -29,7 +33,7 @@ public class CommandHistory  {
 					stockId, 
 					newName);
 			changeName.execute();
-			history.push(changeName);
+			pushCommand(changeName);
 		}	
 	}
 }
