@@ -114,6 +114,4 @@ public class ElementView extends Draggable {
 	public int height() {
 		return height + 4;
 	}
-	
-	
 }

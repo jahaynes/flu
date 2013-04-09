@@ -1,6 +1,7 @@
 package explorer;
 
 import helper.ElementType;
+import helper.InfluenceModelViewFactory;
 import helper.StockModelViewFactory;
 
 import java.awt.Color;
@@ -18,6 +19,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import commands.CommandHistory;
 
 public class Explorer  {
@@ -43,16 +46,22 @@ public class Explorer  {
 		return view;
 	}
 	
-	public void setSelected(ElementType elementType, int id, boolean editMode) {
-		view.setEditMode(editMode);
+	public void setSelected(ElementType selectedType, int id, boolean editMode) {
 		this.selectedIndex = id;
+		this.selectedType = selectedType;
+		
+		view.setEditMode(editMode);
 		view.setSelected();
-		System.out.println("Selected " + elementType + ": " + id);
+		System.out.println("Selected " + selectedType + ": " + id);
 	}
 		
 	public int getSelected() {
 		return selectedIndex;
 	}
+	
+	public ElementType getSelectedType() {
+		return selectedType;
+	}	
 	
 	public void clearSelected() {
 		selectedIndex = -1;
@@ -156,15 +165,15 @@ public class Explorer  {
 			switch(selectedType) {
 			//TODO: Code should go here possibly to display a different explorer for stock and influence
 			case INFLUENCE:
-				this.txtName.setText(StockModelViewFactory.getInstance().getName(selectedIndex));
+				this.txtName.setText(InfluenceModelViewFactory.getInstance().getName(selectedIndex));
 				//this.txtExpr.setText(selectedStock.getExpression());	
 				break;
 			case STOCK:
 				this.txtName.setText(StockModelViewFactory.getInstance().getName(selectedIndex));
 				break;
 			default:
-				//TODO: error case
-				break;			
+				//TODO: better error case
+				throw new NotImplementedException();		
 			}
 		}
 				

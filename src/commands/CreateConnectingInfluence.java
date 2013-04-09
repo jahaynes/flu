@@ -1,6 +1,8 @@
 package commands;
 
 import java.awt.Point;
+
+import view.Canvas;
 import decorations.Margins;
 import helper.InfluenceModelViewFactory;
 import helper.StockModelViewFactory;
@@ -11,6 +13,8 @@ public class CreateConnectingInfluence implements Command {
 	private int stock2;
 	private int left;
 	private int top;
+	
+	private int influenceId;
 	
 	public CreateConnectingInfluence(int stock1, int stock2) {
 		this.stock1 = stock1;
@@ -24,7 +28,7 @@ public class CreateConnectingInfluence implements Command {
 	
 	@Override
 	public void execute() {
-		int influenceId = InfluenceModelViewFactory.getInstance().create();
+		influenceId = InfluenceModelViewFactory.getInstance().create();
 		System.out.println("Connected: " + stock1 + " to " + stock2 + " as influenceid " + influenceId);
 		InfluenceModelViewFactory.getInstance().getView(influenceId).setPosition(new Point(left,top));
 	}
@@ -32,5 +36,7 @@ public class CreateConnectingInfluence implements Command {
 	@Override
 	public void rollback() {
 		System.out.println("Disconnected: " + stock1 + " from " + stock2);
+		InfluenceModelViewFactory.getInstance().remove(influenceId);
+		Canvas.getInstance().repaint();		
 	}
 }

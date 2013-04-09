@@ -1,6 +1,7 @@
 package commands;
 
 import explorer.Explorer;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import view.Canvas;
 import helper.ElementType;
 import helper.InfluenceModelViewFactory;
@@ -33,15 +34,15 @@ public class NameChangeCommand implements Command {
 			StockModelViewFactory.getInstance().getView(elementId).setName(newName);
 			break;
 		default:
-			//TODO: error case
-			break;
+			//TODO: better error case
+			throw new NotImplementedException();
 		}				
 		Canvas.getInstance().repaint();
 	}
 
 	@Override
 	public void rollback() {
-		/*
+		
 		switch(elementType) {
 		case INFLUENCE:
 			InfluenceModelViewFactory.getInstance().get(elementId).setName(oldName);
@@ -52,16 +53,17 @@ public class NameChangeCommand implements Command {
 			StockModelViewFactory.getInstance().getView(elementId).setName(oldName);
 			break;
 		default:
-			//TODO: error case
-			break;
+			//TODO: better error case
+			throw new NotImplementedException();
 		}		
 				
 		//If currently exploring the name-changed stock, redisplay it in non-edit mode
-		if (Explorer.getInstance().getSelectedElement() == elementId) {
-			Explorer.getInstance().setSelectedStock(elementId, false);
+		if (Explorer.getInstance().getSelected() == elementId &&
+				Explorer.getInstance().getSelectedType() == elementType) {
+			Explorer.getInstance().setSelected(elementType, elementId, false);
 		}
 		
-		Canvas.getInstance().repaint();*/
+		Canvas.getInstance().repaint();
 	}
 
 }
