@@ -1,7 +1,5 @@
 package helper;
 
-import influence.Influence;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +7,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import stock.Stock;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import view.ElementView;
 
 public class AbstractModelViewFactory {
@@ -34,36 +32,41 @@ public class AbstractModelViewFactory {
 		return nextId;
 	}
 	
-	public synchronized int create() {
-		final int nextId = consumeId();
-		String name = "STOCK " + nextId;
-		
+	protected synchronized int create() {
+		final int consumedId = consumeId();
 		// Expand the storage to accommodate the direct reference
-		while(allElements.size() < nextId + 1) {
+		while(allElements.size() < consumedId + 1) {
 			allElements.add(null);	
 		}
-		
-		while(allViews.size() < nextId + 1) {
+		while(allViews.size() < consumedId + 1) {
 			allViews.add(null);
 		}
-		
-		allElements.set(nextId, new Stock(name));
-		allViews.set(nextId, new ElementView(nextId, name));
-		usedIds.add(nextId);
-		return nextId;
+		return consumedId;
 	}
 	
-	protected synchronized Element get(Integer id) {
+	protected Element get(Integer id) {
 		assert allElements.contains(id);
 		return allElements.get(id);
 	}
 	
-	public synchronized ElementView getView(Integer id) {
+	public ElementView getView(Integer id) {
 		assert usedIds.contains(id);
 		return allViews.get(id);
 	} 
 	
-	public synchronized void remove(Integer id) {
+	public static ElementView getView(ElementType elementType, Integer id) {
+		switch(elementType) {
+		case INFLUENCE:
+			return InfluenceModelViewFactory.getInstance().getView(id);
+		case STOCK:
+			return StockModelViewFactory.getInstance().getView(id);
+		default:
+			//TODO: better error case
+			throw new NotImplementedException();	
+		}
+	}
+	
+	public void remove(Integer id) {
 		allElements.set(id, null);
 		allViews.set(id, null);
 		usedIds.remove(id);
@@ -81,15 +84,15 @@ public class AbstractModelViewFactory {
 	public static boolean isNameAcceptable(String name) {
 		Iterator<Integer> stockIterator = StockModelViewFactory.getInstance().getIterator();
 		while(stockIterator.hasNext()) {
-			Stock s = StockModelViewFactory.getInstance().get(stockIterator.next());
-			if(/*s != null &&*/ s.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+			Element e = StockModelViewFactory.getInstance().get(stockIterator.next());
+			if(/*s != null &&*/ e.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;
 			}
 		}
 		Iterator<Integer> influenceIterator = InfluenceModelViewFactory.getInstance().getIterator();
 		while(influenceIterator.hasNext()) {
-			Influence i = InfluenceModelViewFactory.getInstance().get(influenceIterator.next());
-			if(/*s != null &&*/ i.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+			Element e = InfluenceModelViewFactory.getInstance().get(influenceIterator.next());
+			if(/*s != null &&*/ e.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;
 			}
 		}

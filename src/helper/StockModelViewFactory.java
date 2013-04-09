@@ -1,6 +1,7 @@
 package helper;
 
 import stock.Stock;
+import view.ElementView;
 
 public class StockModelViewFactory extends AbstractModelViewFactory {
 	
@@ -18,5 +19,14 @@ public class StockModelViewFactory extends AbstractModelViewFactory {
 	public Stock get(Integer id) {
 		return (Stock)super.get(id);
 	}
-					
+
+	public int create() {
+		int nextId = super.create();
+		String name = "STOCK " + nextId;
+		allElements.set(nextId, new Stock(name));
+		allViews.set(nextId, new ElementView(nextId, name));
+		usedIds.add(nextId);
+		return nextId;
+	}
+	
 }

@@ -12,11 +12,15 @@ import explorer.Explorer;
 import view.Canvas;
 import view.ElementView;
 import view.keyboard.Keyboard;
+import helper.AbstractModelViewFactory;
 import helper.ElementType;
-import helper.StockModelViewFactory;
 
 public class ElementDragger implements MouseListener, MouseMotionListener {
 
+	private enum DragType {
+		NOTHING, MOVE, CLONE, CONNECT
+	}
+	
 	private static ElementDragger instance = null;
 	private final Canvas owner;
 
@@ -59,8 +63,10 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	public void mouseClicked(MouseEvent m) {
 		// TODO clean up
 		boolean doubleClicked = m.getClickCount() == 2;
+		
 		held = null;
 		pressedPoint = m.getPoint();
+		
 		List<Integer> pressedInfluenceIds = ElementView.influenceViewsUnderMouse(pressedPoint);
 		if (pressedInfluenceIds.size() > 0) {
 			Explorer.getInstance().setSelected(ElementType.INFLUENCE, pressedInfluenceIds.get(0), doubleClicked);
@@ -73,10 +79,6 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 				Explorer.getInstance().clearSelected();
 			}
 		}
-	}
-
-	private enum DragType {
-		NOTHING, MOVE, CLONE, CONNECT
 	}
 
 	// TODO: As well as checking for start-end within each ctrl/shift/normal,
@@ -102,7 +104,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			if (pressedInfluenceIds.size() > 0) {
 				int selectedInt = pressedInfluenceIds.get(0);
 				if (Keyboard.isCtrlDown()) {
-					startClone(ElementType.INFLUENCE, m, selectedInt);
+					//startClone(ElementType.INFLUENCE, m, selectedInt);
 				} else if (Keyboard.isAltDown()) {
 					//No influence action for now
 				} else {
@@ -164,10 +166,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 
 	private void startMove(ElementType elementType, MouseEvent m, int selectedId) {
 		currentDragType = DragType.MOVE;
-		
-		held = StockModelViewFactory.getInstance().getView(selectedId);
-		
-		
+		held = AbstractModelViewFactory.getView(elementType, selectedId);		
 		held.setHoldPosition();
 		Explorer.getInstance().setSelected(elementType, selectedId, false);
 	}

@@ -1,5 +1,4 @@
 package main;
-import helper.InfluenceModelViewFactory;
 import helper.StockModelViewFactory;
 import view.Window;
 

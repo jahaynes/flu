@@ -1,7 +1,6 @@
 package commands;
 
 import helper.ElementType;
-import helper.InfluenceModelViewFactory;
 import helper.StockModelViewFactory;
 
 import java.awt.Point;

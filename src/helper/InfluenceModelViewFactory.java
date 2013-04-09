@@ -1,5 +1,6 @@
 package helper;
 
+import view.ElementView;
 import influence.Influence;
 
 public class InfluenceModelViewFactory extends AbstractModelViewFactory {
@@ -18,5 +19,14 @@ public class InfluenceModelViewFactory extends AbstractModelViewFactory {
 	public Influence get(Integer id) {
 		return (Influence)super.get(id);
 	}			
+	
+	public int create() {
+		int nextId = super.create();
+		String name = "INFLUENCE " + nextId;
+		allElements.set(nextId, new Influence(name));
+		allViews.set(nextId, new ElementView(nextId, name));
+		usedIds.add(nextId);
+		return nextId;
+	}
 	
 }
