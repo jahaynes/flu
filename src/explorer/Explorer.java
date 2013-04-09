@@ -1,6 +1,8 @@
 package explorer;
 
-import helper.ModelViewFactory;
+import helper.ElementType;
+import helper.StockModelViewFactory;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -29,10 +31,9 @@ public class Explorer  {
 	}
 	
 	private ExplorerView view;
-	private int selectedStockIndex = -1;
 	
-	//Todo: this is bad software and has to go
-	private int selectedInfluenceIndex = -1;
+	private ElementType selectedType = ElementType.UNDEFINED;
+	private int selectedIndex = -1;
 	
 	private Explorer() {
 		view = new ExplorerView();
@@ -42,27 +43,20 @@ public class Explorer  {
 		return view;
 	}
 	
-	public void setSelectedStock(int id, boolean editMode) {
+	public void setSelected(ElementType elementType, int id, boolean editMode) {
 		view.setEditMode(editMode);
-		selectedStockIndex = id;
-		view.setSelectedStock();
-		System.out.println("Selected stock: " + selectedStockIndex);
+		this.selectedIndex = id;
+		view.setSelected();
+		System.out.println("Selected " + elementType + ": " + id);
 	}
-	
-	public void setSelectedInfluence(int id, boolean editMode) {
-		view.setEditMode(editMode);
-		selectedInfluenceIndex = id;
-		view.setSelectedInfluence();
-		System.out.println("Selected stock: " + selectedInfluenceIndex);
-	}
-	
-	public int getSelecdtedStock() {
-		return selectedStockIndex;
+		
+	public int getSelected() {
+		return selectedIndex;
 	}
 	
 	public void clearSelected() {
-		selectedInfluenceIndex = -1;
-		selectedStockIndex = -1;
+		selectedIndex = -1;
+		selectedType = ElementType.UNDEFINED;
 		view.clearSelected();
 	}
 	
@@ -113,7 +107,7 @@ public class Explorer  {
 			txtName.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					CommandHistory.getInstance().changeStockName(selectedStockIndex, txtName.getText());
+					CommandHistory.getInstance().changeName(selectedType, selectedIndex, txtName.getText());
 				}
 			});
 			decorateAndAdd(emptyBorder, componentDimension, xAlign, new JLabel("Name"), txtName);
@@ -158,16 +152,22 @@ public class Explorer  {
 			}
 		}
 		
-		public void setSelectedStock() {
-			this.txtName.setText(ModelViewFactory.getInstance().getName(selectedStockIndex));
-			//this.txtExpr.setText(selectedStock.getExpression());	
+		public void setSelected() {
+			switch(selectedType) {
+			//TODO: Code should go here possibly to display a different explorer for stock and influence
+			case INFLUENCE:
+				this.txtName.setText(StockModelViewFactory.getInstance().getName(selectedIndex));
+				//this.txtExpr.setText(selectedStock.getExpression());	
+				break;
+			case STOCK:
+				this.txtName.setText(StockModelViewFactory.getInstance().getName(selectedIndex));
+				break;
+			default:
+				//TODO: error case
+				break;			
+			}
 		}
-		
-		public void setSelectedInfluence() {
-			this.txtName.setText(ModelViewFactory.getInstance().getInfluenceName(selectedStockIndex));
-			//this.txtExpr.setText(selectedStock.getExpression());	
-		}
-		
+				
 		public void clearSelected() {
 			this.txtName.setText(null);
 			this.txtExpr.setText(null);

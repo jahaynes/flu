@@ -1,5 +1,6 @@
 package main;
-import helper.ModelViewFactory;
+import helper.InfluenceModelViewFactory;
+import helper.StockModelViewFactory;
 import view.Window;
 
 public class Main {
@@ -9,9 +10,9 @@ public class Main {
 		new Window("flu");
 		
 		//Test data
-		ModelViewFactory.getInstance().create();
-		ModelViewFactory.getInstance().create();
-		ModelViewFactory.getInstance().create();
+		StockModelViewFactory.getInstance().create();
+		StockModelViewFactory.getInstance().create();
+		StockModelViewFactory.getInstance().create();
 	}
 
 }

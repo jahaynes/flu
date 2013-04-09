@@ -12,7 +12,8 @@ import explorer.Explorer;
 import view.Canvas;
 import view.ElementView;
 import view.keyboard.Keyboard;
-import helper.ModelViewFactory;
+import helper.ElementType;
+import helper.StockModelViewFactory;
 
 public class ElementDragger implements MouseListener, MouseMotionListener {
 
@@ -59,20 +60,14 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		// TODO clean up
 		boolean doubleClicked = m.getClickCount() == 2;
 		held = null;
-
 		pressedPoint = m.getPoint();
 		List<Integer> pressedInfluenceIds = ElementView.influenceViewsUnderMouse(pressedPoint);
-
 		if (pressedInfluenceIds.size() > 0) {
-			
-			Explorer.getInstance().setSelectedInfluence(pressedInfluenceIds.get(0), doubleClicked);
-			
+			Explorer.getInstance().setSelected(ElementType.INFLUENCE, pressedInfluenceIds.get(0), doubleClicked);
 		} else {	
-			
 			List<Integer> pressedStockIds = ElementView.stockViewsUnderMouse(pressedPoint);
-			
 			if (pressedStockIds.size() > 0) {
-				Explorer.getInstance().setSelectedStock(pressedStockIds.get(0), doubleClicked);
+				Explorer.getInstance().setSelected(ElementType.STOCK, pressedStockIds.get(0), doubleClicked);
 			} else {
 				// Nothing clicked. clear explorer
 				Explorer.getInstance().clearSelected();
@@ -96,22 +91,22 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		if (pressedStockIds.size() > 0) {
 			int selectedInt = pressedStockIds.get(0);
 			if (Keyboard.isCtrlDown()) {
-				startClone(m, selectedInt);
+				startClone(ElementType.STOCK, m, selectedInt);
 			} else if (Keyboard.isAltDown()) {
 				startConnection(m, selectedInt);
 			} else {
-				startStockMove(m, selectedInt);
+				startMove(ElementType.STOCK, m, selectedInt);
 			}
 		} else if (true) {
 			List<Integer> pressedInfluenceIds = ElementView.influenceViewsUnderMouse(pressedPoint);
 			if (pressedInfluenceIds.size() > 0) {
 				int selectedInt = pressedInfluenceIds.get(0);
 				if (Keyboard.isCtrlDown()) {
-					startClone(m, selectedInt);
+					startClone(ElementType.INFLUENCE, m, selectedInt);
 				} else if (Keyboard.isAltDown()) {
 					//No influence action for now
 				} else {
-					startInfluenceMove(m, selectedInt);
+					startMove(ElementType.INFLUENCE, m, selectedInt);
 				}
 			} else {
 				Explorer.getInstance().clearSelected();
@@ -159,26 +154,22 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		sourceStockId = selectedId;
 	}
 
-	private void startClone(MouseEvent m, int selectedId) {
+	private void startClone(ElementType elementType, MouseEvent m, int selectedId) {
 		currentDragType = DragType.CLONE;
 		DuplicateStockCommand command = new DuplicateStockCommand(selectedId);
 		CommandHistory.getInstance().doCommand(command);
 		int newId = command.getNewId();
-		startStockMove(m, newId);
+		startMove(elementType, m, newId);
 	}
 
-	private void startStockMove(MouseEvent m, int selectedId) {
+	private void startMove(ElementType elementType, MouseEvent m, int selectedId) {
 		currentDragType = DragType.MOVE;
-		held = ModelViewFactory.getInstance().getView(selectedId);
+		
+		held = StockModelViewFactory.getInstance().getView(selectedId);
+		
+		
 		held.setHoldPosition();
-		Explorer.getInstance().setSelectedStock(selectedId, false);
-	}
-
-	private void startInfluenceMove(MouseEvent m, int selectedId) {
-		currentDragType = DragType.MOVE;
-		held = ModelViewFactory.getInstance().getInfluenceView(selectedId);
-		held.setHoldPosition();
-		Explorer.getInstance().setSelectedStock(selectedId, false);
+		Explorer.getInstance().setSelected(elementType, selectedId, false);
 	}
 
 	@Override

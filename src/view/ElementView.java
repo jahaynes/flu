@@ -12,7 +12,8 @@ import java.util.List;
 import stock.Stock;
 import decorations.Colours;
 import decorations.Margins;
-import helper.ModelViewFactory;
+import helper.InfluenceModelViewFactory;
+import helper.StockModelViewFactory;
 
 public class ElementView extends Draggable {
 		
@@ -49,13 +50,13 @@ public class ElementView extends Draggable {
 		Iterator<Integer> stockIds = Stock.getValidIds();
 		while (stockIds.hasNext()) {
 			int id = stockIds.next();
-			ModelViewFactory.getInstance().getView(id).paint(g);	
+			StockModelViewFactory.getInstance().getView(id).paint(g);	
 		}
 		
 		Iterator<Integer> influenceIds = Influence.getValidIds();
 		while (influenceIds.hasNext()) {
 			int id = influenceIds.next();
-			ModelViewFactory.getInstance().getInfluenceView(id).paint(g);	
+			InfluenceModelViewFactory.getInstance().getView(id).paint(g);	
 		}
 	}
 	
@@ -71,7 +72,7 @@ public class ElementView extends Draggable {
 		Iterator<Integer> ids = Stock.getValidIds();
 		while (ids.hasNext()) {
 			Integer next = ids.next();
-			if( ModelViewFactory.getInstance().getView(next).mouseIn(mouseClick) ) {
+			if( StockModelViewFactory.getInstance().getView(next).mouseIn(mouseClick) ) {
 				clicked.add(next);
 			}			
 		}
@@ -83,7 +84,7 @@ public class ElementView extends Draggable {
 		Iterator<Integer> ids = Influence.getValidIds();
 		while (ids.hasNext()) {
 			Integer next = ids.next();
-			if( ModelViewFactory.getInstance().getInfluenceView(next).mouseIn(mouseClick) ) {
+			if( InfluenceModelViewFactory.getInstance().getView(next).mouseIn(mouseClick) ) {
 				clicked.add(next);
 			}			
 		}

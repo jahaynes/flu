@@ -1,5 +1,7 @@
 package helper;
 
+import influence.Influence;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,12 +12,12 @@ import java.util.Vector;
 import stock.Stock;
 import view.ElementView;
 
-public class AbstractFactory {
+public class AbstractModelViewFactory {
 
-	protected static final SortedSet<Integer> usedIds = new TreeSet<Integer>();
-	protected static final List<Integer> freeIds = new LinkedList<Integer>();
-	protected static final List<Element> allElements = new Vector<Element>();
-	protected static final List<ElementView> allViews = new Vector<ElementView>();
+	protected final SortedSet<Integer> usedIds = new TreeSet<Integer>();
+	protected final List<Integer> freeIds = new LinkedList<Integer>();
+	protected final List<Element> allElements = new Vector<Element>();
+	protected final List<ElementView> allViews = new Vector<ElementView>();
 	
 	protected Integer consumeId() {			
 		final int nextId;			
@@ -51,15 +53,15 @@ public class AbstractFactory {
 		return nextId;
 	}
 	
-	public synchronized ElementView getView(Integer id) {
-		assert usedIds.contains(id);
-		return allViews.get(id);
-	}
-
-	public synchronized Element get(Integer id) {
+	protected synchronized Element get(Integer id) {
 		assert allElements.contains(id);
 		return allElements.get(id);
 	}
+	
+	public synchronized ElementView getView(Integer id) {
+		assert usedIds.contains(id);
+		return allViews.get(id);
+	} 
 	
 	public synchronized void remove(Integer id) {
 		allElements.set(id, null);
@@ -75,5 +77,22 @@ public class AbstractFactory {
 	public String getName(int selectedIndex) {
 		return allElements.get(selectedIndex).getName();
 	}
-	
+		
+	public static boolean isNameAcceptable(String name) {
+		Iterator<Integer> stockIterator = StockModelViewFactory.getInstance().getIterator();
+		while(stockIterator.hasNext()) {
+			Stock s = StockModelViewFactory.getInstance().get(stockIterator.next());
+			if(/*s != null &&*/ s.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+				return false;
+			}
+		}
+		Iterator<Integer> influenceIterator = InfluenceModelViewFactory.getInstance().getIterator();
+		while(influenceIterator.hasNext()) {
+			Influence i = InfluenceModelViewFactory.getInstance().get(influenceIterator.next());
+			if(/*s != null &&*/ i.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+				return false;
+			}
+		}
+		return true;
+	}	
 }

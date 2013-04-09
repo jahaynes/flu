@@ -1,7 +1,9 @@
 package commands;
 
 import helper.ElementType;
-import helper.ModelViewFactory;
+import helper.InfluenceModelViewFactory;
+import helper.StockModelViewFactory;
+
 import java.awt.Point;
 import decorations.Margins;
 import view.Canvas;
@@ -19,11 +21,11 @@ public class DuplicateStockCommand extends CreateCommand {
 	@Override
 	public void execute() {
 		//Currently cloning just takes the left,top from the original, nothing else
-		ElementView sourceView = ModelViewFactory.getInstance().getView(sourceId);
+		ElementView sourceView = StockModelViewFactory.getInstance().getView(sourceId);
 		int left = sourceView.left();		
 		int top = sourceView.top();	
-		createdId = ModelViewFactory.getInstance().create();
-		ModelViewFactory.getInstance().getView(createdId).setPosition(new Point(left-Margins.STOCKVIEWLEFTMARGIN, top-Margins.STOCKVIEWTOPMARGIN));	
+		createdId = StockModelViewFactory.getInstance().create();
+		StockModelViewFactory.getInstance().getView(createdId).setPosition(new Point(left-Margins.STOCKVIEWLEFTMARGIN, top-Margins.STOCKVIEWTOPMARGIN));	
 		System.out.println("Cloned " + sourceId + " to " + createdId);
 		Canvas.getInstance().repaint();
 	}

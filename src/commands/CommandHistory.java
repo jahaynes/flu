@@ -1,7 +1,7 @@
 package commands;
 
-import helper.ModelViewFactory;
-
+import helper.AbstractModelViewFactory;
+import helper.ElementType;
 import java.util.Stack;
 
 public class CommandHistory  {
@@ -31,10 +31,11 @@ public class CommandHistory  {
 		}
 	}
 
-	public void changeStockName(int stockId, String newName) {	
+	public void changeName(ElementType elementType, int stockId, String newName) {	
 		String trimmedName = newName.trim();
-		if (ModelViewFactory.getInstance().isNameAcceptable(trimmedName)) {
+		if (AbstractModelViewFactory.isNameAcceptable(trimmedName)) {
 			Command changeName = new NameChangeCommand(
+					elementType,
 					stockId, 
 					newName);
 			doCommand(changeName);

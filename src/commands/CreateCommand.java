@@ -2,7 +2,8 @@ package commands;
 
 import view.Canvas;
 import helper.ElementType;
-import helper.ModelViewFactory;
+import helper.InfluenceModelViewFactory;
+import helper.StockModelViewFactory;
 
 public class CreateCommand implements Command {
 
@@ -17,10 +18,10 @@ public class CreateCommand implements Command {
 	public void execute() {
 		switch(elementType) {
 		case INFLUENCE:
-			createdId = ModelViewFactory.getInstance().createInfluence();
+			createdId = InfluenceModelViewFactory.getInstance().create();
 			break;
 		case STOCK:
-			createdId = ModelViewFactory.getInstance().create();
+			createdId = StockModelViewFactory.getInstance().create();
 			break;
 		default:
 			break;
@@ -32,10 +33,10 @@ public class CreateCommand implements Command {
 	public void rollback() {
 		switch(elementType) {
 		case INFLUENCE:
-			ModelViewFactory.getInstance().removeInfluence(createdId);
+			InfluenceModelViewFactory.getInstance().remove(createdId);
 			break;
 		case STOCK:
-			ModelViewFactory.getInstance().remove(createdId);
+			StockModelViewFactory.getInstance().remove(createdId);
 			break;
 		default:
 			break;
