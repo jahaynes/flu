@@ -31,6 +31,9 @@ public class Explorer  {
 	private ExplorerView view;
 	private int selectedStockIndex = -1;
 	
+	//Todo: this is bad software and has to go
+	private int selectedInfluenceIndex = -1;
+	
 	private Explorer() {
 		view = new ExplorerView();
 	}
@@ -42,15 +45,23 @@ public class Explorer  {
 	public void setSelectedStock(int id, boolean editMode) {
 		view.setEditMode(editMode);
 		selectedStockIndex = id;
-		view.setSelected();
+		view.setSelectedStock();
 		System.out.println("Selected stock: " + selectedStockIndex);
 	}
 	
-	public int getSelected() {
+	public void setSelectedInfluence(int id, boolean editMode) {
+		view.setEditMode(editMode);
+		selectedInfluenceIndex = id;
+		view.setSelectedInfluence();
+		System.out.println("Selected stock: " + selectedInfluenceIndex);
+	}
+	
+	public int getSelecdtedStock() {
 		return selectedStockIndex;
 	}
 	
 	public void clearSelected() {
+		selectedInfluenceIndex = -1;
 		selectedStockIndex = -1;
 		view.clearSelected();
 	}
@@ -147,8 +158,13 @@ public class Explorer  {
 			}
 		}
 		
-		public void setSelected() {
-			this.txtName.setText(ModelViewFactory.getName(selectedStockIndex));
+		public void setSelectedStock() {
+			this.txtName.setText(ModelViewFactory.getInstance().getName(selectedStockIndex));
+			//this.txtExpr.setText(selectedStock.getExpression());	
+		}
+		
+		public void setSelectedInfluence() {
+			this.txtName.setText(ModelViewFactory.getInstance().getInfluenceName(selectedStockIndex));
 			//this.txtExpr.setText(selectedStock.getExpression());	
 		}
 		

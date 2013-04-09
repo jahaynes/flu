@@ -21,7 +21,6 @@ public class CommandHistory  {
 		history.push(command);
 	}
 	
-	
 	//TODO: put rollback-only stuff in here like MOVE
 	//public void alreadyDidCommand()
 	
@@ -34,7 +33,7 @@ public class CommandHistory  {
 
 	public void changeStockName(int stockId, String newName) {	
 		String trimmedName = newName.trim();
-		if (ModelViewFactory.isNameAcceptable(trimmedName)) {
+		if (ModelViewFactory.getInstance().isNameAcceptable(trimmedName)) {
 			Command changeName = new NameChangeCommand(
 					stockId, 
 					newName);

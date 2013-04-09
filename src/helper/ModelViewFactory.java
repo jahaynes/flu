@@ -10,34 +10,42 @@ import java.util.Vector;
 import stock.Stock;
 import view.ElementView;
 
-public class ModelViewFactory{
+public class ModelViewFactory extends AbstractFactory {
 	
-	/* Id */
-	private static final SortedSet<Integer> usedIds = new TreeSet<Integer>();
-	private static final List<Integer> freeIds = new LinkedList<Integer>();
+	private static ModelViewFactory instance;
+	public static synchronized ModelViewFactory getInstance() {
+		if(instance == null) {
+			instance = new ModelViewFactory();
+		}
+		return instance;
+	}
 	
-	/* All */
-	private static final List<Stock> allStocks = new Vector<Stock>();
+	private ModelViewFactory() {
+		
+	}
+		
+	private static final SortedSet<Integer> usedInfluenceIds = new TreeSet<Integer>();
+	private static final List<Integer> freeInfluenceIds = new LinkedList<Integer>();
 	private static final List<Influence> allInfluences = new Vector<Influence>();	
-	private static final List<ElementView> allViews = new Vector<ElementView>();
+	private static final List<ElementView> allInfluenceViews = new Vector<ElementView>();
 	
-	private static Integer consumeId() {			
+	private Integer consumeInfluenceId() {			
 		final int nextId;			
-		if(freeIds.size() > 0) {
-			nextId = freeIds.remove(0);
+		if(freeInfluenceIds.size() > 0) {
+			nextId = freeInfluenceIds.remove(0);
 		} else { 
-			if (usedIds.size() > 0) {
-				nextId = usedIds.last() + 1;
+			if (usedInfluenceIds.size() > 0) {
+				nextId = usedInfluenceIds.last() + 1;
 			} else {
 				nextId = 0;
 			}
 		}
-		usedIds.add(nextId);
+		usedInfluenceIds.add(nextId);
 		return nextId;
 	}
-
-	public static synchronized int createInfluence() {
-		final int nextId = consumeId();
+	
+	public synchronized int createInfluence() {
+		final int nextId = consumeInfluenceId();
 		String name = "INFLUENCE " + nextId;
 		
 		// Expand the storage to accommodate the direct reference
@@ -45,72 +53,53 @@ public class ModelViewFactory{
 			allInfluences.add(null);
 		}
 		
-		while(allViews.size() < nextId + 1) {
-			allViews.add(null);
+		while(allInfluenceViews.size() < nextId + 1) {
+			allInfluenceViews.add(null);
 		}
 		
 		allInfluences.set(nextId, new Influence(name));
-		allViews.set(nextId, new ElementView(nextId, name));
-		usedIds.add(nextId);
+		allInfluenceViews.set(nextId, new ElementView(nextId, name));
+		usedInfluenceIds.add(nextId);
 		return nextId;
 	}
-	
-	public static synchronized int createStock() {
-		final int nextId = consumeId();
-		String name = "STOCK " + nextId;
-		
-		// Expand the storage to accommodate the direct reference
-		while(allStocks.size() < nextId + 1) {
-			allStocks.add(null);	
-		}
-		
-		while(allViews.size() < nextId + 1) {
-			allViews.add(null);
-		}
-		
-		allStocks.set(nextId, new Stock(name));
-		allViews.set(nextId, new ElementView(nextId, name));
-		usedIds.add(nextId);
-		return nextId;
+			
+	public synchronized ElementView getInfluenceView(Integer id) {
+		assert usedInfluenceIds.contains(id);
+		return allInfluenceViews.get(id);
 	}
-
-	public static synchronized Stock getStock(Integer id) {
-		assert usedIds.contains(id);
-		return allStocks.get(id);
+			
+	public synchronized void removeInfluence(Integer id) {
+		allInfluences.set(id, null);
+		allInfluenceViews.set(id, null);
+		usedInfluenceIds.remove(id);
+		freeInfluenceIds.add(id);
 	}
 	
-	public static synchronized ElementView getView(Integer id) {
-		assert usedIds.contains(id);
-		return allViews.get(id);
-	}
-	
-	public static synchronized void remove(Integer id) {
-		allStocks.set(id, null);
-		allViews.set(id, null);
-		usedIds.remove(id);
-		freeIds.add(id);
-	}
-	
-	public static boolean isNameAcceptable(String name) {
+	public boolean isNameAcceptable(String name) {
 		//For now, just check the name doesn't already exist
-		for(Stock s : allStocks) {
+		//TODO: check out the direct cast below
+		for(Element e : allElements) {
+			Stock s = (Stock)e;
 			if(s != null && s.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;
 			}
 		}
+		
+		for(Influence i : allInfluences) {
+			if(i != null && i.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
+		
+	public Iterator<Integer> getInfluenceIterator() {
+		return usedInfluenceIds.iterator();
+	}
 	
-	public static Iterator<Integer> getIterator() {
-		return usedIds.iterator();
-	}
-
-	public static String getName(int selectedIndex) {
-		if(allStocks.get(selectedIndex) == null) {
-			return allInfluences.get(selectedIndex).getName();
-		} else {
-			return allStocks.get(selectedIndex).getName();
-		}
-	}
+	public String getInfluenceName(int selectedIndex) {
+		return allInfluences.get(selectedIndex).getName();
+	} 
 			
 }

@@ -9,9 +9,9 @@ public class Main {
 		new Window("flu");
 		
 		//Test data
-		ModelViewFactory.createStock();
-		ModelViewFactory.createStock();
-		ModelViewFactory.createStock();
+		ModelViewFactory.getInstance().create();
+		ModelViewFactory.getInstance().create();
+		ModelViewFactory.getInstance().create();
 	}
 
 }

@@ -6,34 +6,34 @@ import helper.ModelViewFactory;
 
 public class NameChangeCommand implements Command {
 	
-	private int stockId;
+	private int elementId;
 	private String oldName;
 	private String newName;
 	
-	public NameChangeCommand(int stockId, String newName) {
-		this.oldName = ModelViewFactory.getStock(stockId).getName();
-		this.stockId = stockId;
+	public NameChangeCommand(int elementId, String newName) {
+		this.oldName = ModelViewFactory.getInstance().get(elementId).getName();
+		this.elementId = elementId;
 		this.newName = newName;
 	}
 	
 	@Override
 	public void execute() {
-		ModelViewFactory.getStock(stockId).setName(newName);
-		ModelViewFactory.getView(stockId).setName(newName);		
+		ModelViewFactory.getInstance().get(elementId).setName(newName);
+		ModelViewFactory.getInstance().getView(elementId).setName(newName);		
 		Canvas.getInstance().repaint();
 	}
 
 	@Override
 	public void rollback() {
-		ModelViewFactory.getStock(stockId).setName(oldName);
-		ModelViewFactory.getView(stockId).setName(oldName);
+	/*	ModelViewFactory.getInstance().get(elementId).setName(oldName);
+		ModelViewFactory.getInstance().getView(elementId).setName(oldName);
 		
 		//If currently exploring the name-changed stock, redisplay it in non-edit mode
-		if (Explorer.getInstance().getSelected() == stockId) {
-			Explorer.getInstance().setSelectedStock(stockId, false);
+		if (Explorer.getInstance().getSelectedElement() == elementId) {
+			Explorer.getInstance().setSelectedStock(elementId, false);
 		}
 		
-		Canvas.getInstance().repaint();
+		Canvas.getInstance().repaint();*/
 	}
 
 }

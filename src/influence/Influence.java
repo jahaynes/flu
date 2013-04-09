@@ -1,7 +1,15 @@
 package influence;
 
-public class Influence {
+import helper.Element;
+import helper.ModelViewFactory;
+import java.util.Iterator;
 
+public class Influence extends Element {
+
+	public static Iterator<Integer> getValidIds() {
+		return ModelViewFactory.getInstance().getInfluenceIterator();
+	}
+	
 	private String name;
 	
 	/* Simple dummy class to provide something for the GUI */
@@ -16,6 +24,5 @@ public class Influence {
 	public String getName() {
 		return name;
 	}
-	
 	
 }

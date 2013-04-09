@@ -1,5 +1,7 @@
 package view;
 
+import influence.Influence;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -42,11 +44,18 @@ public class ElementView extends Draggable {
 		g.drawString(drawName, position.x, position.y);
 	}
 	
+	//TODO dupe
 	public static void paintAll(Graphics g) {	
-		Iterator<Integer> ids = Stock.getValidIds();
-		while (ids.hasNext()) {
-			int id = ids.next();
-			ModelViewFactory.getView(id).paint(g);	
+		Iterator<Integer> stockIds = Stock.getValidIds();
+		while (stockIds.hasNext()) {
+			int id = stockIds.next();
+			ModelViewFactory.getInstance().getView(id).paint(g);	
+		}
+		
+		Iterator<Integer> influenceIds = Influence.getValidIds();
+		while (influenceIds.hasNext()) {
+			int id = influenceIds.next();
+			ModelViewFactory.getInstance().getInfluenceView(id).paint(g);	
 		}
 	}
 	
@@ -56,13 +65,25 @@ public class ElementView extends Draggable {
 			&& mouse.y >= top()
 			&& mouse.y <= bottom();
 	}
-	
-	public static List<Integer> viewsUnderMouse(Point mouseClick) {
-		List<Integer> clicked = new ArrayList<Integer>();
+		
+	public static List<Integer> stockViewsUnderMouse(Point mouseClick) {
+		List<Integer> clicked = new ArrayList<Integer>();	
 		Iterator<Integer> ids = Stock.getValidIds();
 		while (ids.hasNext()) {
 			Integer next = ids.next();
-			if( ModelViewFactory.getView(next).mouseIn(mouseClick) ) {
+			if( ModelViewFactory.getInstance().getView(next).mouseIn(mouseClick) ) {
+				clicked.add(next);
+			}			
+		}
+		return clicked;
+	}
+	
+	public static List<Integer> influenceViewsUnderMouse(Point mouseClick) {
+		List<Integer> clicked = new ArrayList<Integer>();	
+		Iterator<Integer> ids = Influence.getValidIds();
+		while (ids.hasNext()) {
+			Integer next = ids.next();
+			if( ModelViewFactory.getInstance().getInfluenceView(next).mouseIn(mouseClick) ) {
 				clicked.add(next);
 			}			
 		}
