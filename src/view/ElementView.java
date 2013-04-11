@@ -1,15 +1,12 @@
 package view;
 
 import influence.Influence;
-
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import stock.Stock;
 import decorations.Colours;
 import decorations.Margins;
@@ -21,8 +18,8 @@ public class ElementView extends Draggable {
 	private static final BufferedImage backBuffer = new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY);
 	
 	private String drawName;	
-	private int width;
-	private int height;
+	private int _width;
+	private int _height;
 			
 	public ElementView(String name) {
 		position = new Point(100,100);
@@ -30,8 +27,8 @@ public class ElementView extends Draggable {
 	}
 	
 	public void setName(String name) {
-		width = backBuffer.getGraphics().getFontMetrics().stringWidth(name);
-		height = backBuffer.getGraphics().getFontMetrics().getHeight();
+		_width = backBuffer.getGraphics().getFontMetrics().stringWidth(name);
+		_height = backBuffer.getGraphics().getFontMetrics().getHeight();
 		this.drawName = name;
 	}
 			
@@ -43,11 +40,11 @@ public class ElementView extends Draggable {
 		g.setColor(Colours.stockColor);
 		g.fillRect(left(), top(), width(), height());		
 		g.setColor(Colours.textColor);
-		g.drawString(drawName, left() + Margins.STOCKVIEWTEXTMARGINLEFT, bottom() + Margins.STOCKVIEWTEXTMARGINTOP);
+		g.drawString(drawName, left() + Margins.STOCKVIEWTEXTMARGINLEFT, top() + Margins.STOCKVIEWTEXTMARGINTOP);
 		
 		//Mark out the centre for debugging
-		g.setColor(Color.red);
-		g.fillOval(position.x-4, position.y-4, 8, 8);
+		//g.setColor(Color.red);
+		//g.fillOval(position.x-4, position.y-4, 8, 8);
 		
 	}
 	
@@ -107,27 +104,27 @@ public class ElementView extends Draggable {
 	}
 	
 	public int left() {
-		return position.x - (width >> 1) - Margins.STOCKVIEWLEFTPADDING;
+		return position.x - (_width >> 1) - Margins.STOCKVIEWLEFTPADDING;
 	}
 	
 	public int top() {
-		return position.y - (height >> 1) - Margins.STOCKVIEWTOPPADDING;
+		return position.y - (_height >> 1) - Margins.STOCKVIEWTOPPADDING;
 	}
 	
 	private int right() {
-		return left() + (width >> 1);
+		return left() + width();
 	}
 	
 	private int bottom() {
-		return top() + (height >> 1);
+		return top() + height();
 	}
 	
 	public int width() {
-		return width + (Margins.STOCKVIEWLEFTPADDING << 1);
+		return _width + (Margins.STOCKVIEWLEFTPADDING << 1);
 	}
 	
 	public int height() {
-		return height + (Margins.STOCKVIEWTOPPADDING << 1);
+		return _height + (Margins.STOCKVIEWTOPPADDING << 1);
 	}
 	
 	public Point getPosition() {

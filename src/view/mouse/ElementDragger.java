@@ -178,7 +178,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		if(!wasDuplicated) {
 			//Prepare the move command (for rollback purposes only -- don't execute.  Don't push it until drag happens)
 			ElementView view = AbstractModelViewFactory.getView(elementType, selectedId);		
-			currentMoveCommand = new MoveViewCommand(elementType, selectedId, new Point(view.left(), view.top()));
+			currentMoveCommand = new MoveViewCommand(elementType, selectedId, new Point(view.getPosition()));
 		}
 		
 		currentDragType = DragType.MOVE;

@@ -18,11 +18,9 @@ public class DuplicateStockCommand extends CreateCommand {
 	@Override
 	public void execute() {
 		//Currently cloning just takes the left,top from the original, nothing else
-		ElementView sourceView = StockModelViewFactory.getInstance().getView(sourceId);
-		int left = sourceView.left();		
-		int top = sourceView.top();	
+		ElementView sourceView = StockModelViewFactory.getInstance().getView(sourceId);	
 		createdId = StockModelViewFactory.getInstance().create();
-		StockModelViewFactory.getInstance().getView(createdId).setPosition(new Point(left, top));	
+		StockModelViewFactory.getInstance().getView(createdId).setPosition(new Point(sourceView.getPosition()));	
 		System.out.println("Cloned " + sourceId + " to " + createdId);
 		Canvas.getInstance().repaint();
 	}
