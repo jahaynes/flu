@@ -9,7 +9,6 @@ import commands.CommandHistory;
 import commands.CreateConnectingInfluence;
 import commands.DuplicateStockCommand;
 import commands.MoveViewCommand;
-import decorations.Margins;
 import explorer.Explorer;
 import view.Canvas;
 import view.ElementView;
@@ -179,7 +178,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		if(!wasDuplicated) {
 			//Prepare the move command (for rollback purposes only -- don't execute.  Don't push it until drag happens)
 			ElementView view = AbstractModelViewFactory.getView(elementType, selectedId);		
-			currentMoveCommand = new MoveViewCommand(elementType, selectedId, new Point(view.left() - Margins.STOCKVIEWLEFTMARGIN, view.top() - Margins.STOCKVIEWTOPMARGIN));
+			currentMoveCommand = new MoveViewCommand(elementType, selectedId, new Point(view.left(), view.top()));
 		}
 		
 		currentDragType = DragType.MOVE;

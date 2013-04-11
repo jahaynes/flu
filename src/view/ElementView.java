@@ -2,6 +2,7 @@ package view;
 
 import influence.Influence;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -22,7 +23,7 @@ public class ElementView extends Draggable {
 	private String drawName;	
 	private int width;
 	private int height;
-		
+			
 	public ElementView(String name) {
 		position = new Point(100,100);
 		setName(name);
@@ -37,12 +38,17 @@ public class ElementView extends Draggable {
 	public void setPosition(Point position) {
 		this.position = position;
 	}
-		
+			
 	public void paint(Graphics g) {				
 		g.setColor(Colours.stockColor);
 		g.fillRect(left(), top(), width(), height());		
 		g.setColor(Colours.textColor);
-		g.drawString(drawName, position.x, position.y);
+		g.drawString(drawName, left() + Margins.STOCKVIEWTEXTMARGINLEFT, bottom() + Margins.STOCKVIEWTEXTMARGINTOP);
+		
+		//Mark out the centre for debugging
+		g.setColor(Color.red);
+		g.fillOval(position.x-4, position.y-4, 8, 8);
+		
 	}
 	
 	public static void paintAll(Graphics g) {	
@@ -101,26 +107,31 @@ public class ElementView extends Draggable {
 	}
 	
 	public int left() {
-		return position.x + Margins.STOCKVIEWLEFTMARGIN;
+		return position.x - (width >> 1) - Margins.STOCKVIEWLEFTPADDING;
 	}
 	
 	public int top() {
-		return position.y +  Margins.STOCKVIEWTOPMARGIN;
+		return position.y - (height >> 1) - Margins.STOCKVIEWTOPPADDING;
 	}
 	
 	private int right() {
-		return left() + width;
+		return left() + (width >> 1);
 	}
 	
 	private int bottom() {
-		return top() + height;
+		return top() + (height >> 1);
 	}
 	
 	public int width() {
-		return width + 4;
+		return width + (Margins.STOCKVIEWLEFTPADDING << 1);
 	}
 	
 	public int height() {
-		return height + 4;
+		return height + (Margins.STOCKVIEWTOPPADDING << 1);
 	}
+	
+	public Point getPosition() {
+		return position;
+	}
+	
 }

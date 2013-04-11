@@ -3,7 +3,6 @@ package commands;
 import java.awt.Point;
 
 import view.Canvas;
-import decorations.Margins;
 import helper.InfluenceModelViewFactory;
 import helper.StockModelViewFactory;
 
@@ -11,8 +10,8 @@ public class CreateConnectingInfluence implements Command {
 	
 	private int stock1;
 	private int stock2;
-	private int left;
-	private int top;
+	private int x;
+	private int y;
 	
 	private int influenceId;
 	
@@ -22,14 +21,14 @@ public class CreateConnectingInfluence implements Command {
 		
 		StockModelViewFactory sf = StockModelViewFactory.getInstance();
 		
-		left = (sf.getView(stock1).left() + sf.getView(stock2).left() >> 1)  - Margins.STOCKVIEWLEFTMARGIN;
-		top = (sf.getView(stock1).top() + sf.getView(stock2).top() >> 1) - Margins.STOCKVIEWTOPMARGIN;
+		x = (sf.getView(stock1).getPosition().x + sf.getView(stock2).getPosition().x) >> 1;
+		y = (sf.getView(stock1).getPosition().y + sf.getView(stock2).getPosition().y) >> 1;
 	}
 	
 	@Override
 	public void execute() {
 		influenceId = InfluenceModelViewFactory.getInstance().create();
-		InfluenceModelViewFactory.getInstance().getView(influenceId).setPosition(new Point(left,top));
+		InfluenceModelViewFactory.getInstance().getView(influenceId).setPosition(new Point(x,y));
 		InfluenceModelViewFactory.getInstance().get(influenceId).connectToStock(stock1);
 		InfluenceModelViewFactory.getInstance().get(influenceId).connectToStock(stock2);
 		System.out.println("Connected: " + stock1 + " to " + stock2 + " as influenceid " + influenceId);

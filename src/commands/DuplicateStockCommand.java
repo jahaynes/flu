@@ -2,9 +2,7 @@ package commands;
 
 import helper.ElementType;
 import helper.StockModelViewFactory;
-
 import java.awt.Point;
-import decorations.Margins;
 import view.Canvas;
 import view.ElementView;
 
@@ -24,7 +22,7 @@ public class DuplicateStockCommand extends CreateCommand {
 		int left = sourceView.left();		
 		int top = sourceView.top();	
 		createdId = StockModelViewFactory.getInstance().create();
-		StockModelViewFactory.getInstance().getView(createdId).setPosition(new Point(left-Margins.STOCKVIEWLEFTMARGIN, top-Margins.STOCKVIEWTOPMARGIN));	
+		StockModelViewFactory.getInstance().getView(createdId).setPosition(new Point(left, top));	
 		System.out.println("Cloned " + sourceId + " to " + createdId);
 		Canvas.getInstance().repaint();
 	}
