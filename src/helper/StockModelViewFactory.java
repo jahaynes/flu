@@ -24,7 +24,7 @@ public class StockModelViewFactory extends AbstractModelViewFactory {
 		int nextId = super.create();
 		String name = "STOCK " + nextId;
 		allElements.set(nextId, new Stock(name));
-		allViews.set(nextId, new ElementView(nextId, name));
+		allViews.set(nextId, new ElementView(name));
 		usedIds.add(nextId);
 		return nextId;
 	}

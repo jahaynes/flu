@@ -23,7 +23,7 @@ public class ElementView extends Draggable {
 	private int width;
 	private int height;
 		
-	public ElementView(int stockId, String name) {
+	public ElementView(String name) {
 		position = new Point(100,100);
 		setName(name);
 	}
@@ -45,17 +45,28 @@ public class ElementView extends Draggable {
 		g.drawString(drawName, position.x, position.y);
 	}
 	
-	//TODO dupe
 	public static void paintAll(Graphics g) {	
+		
+		//First draw all connections
+		
+		//Then draw all influences
+		Iterator<Integer> influenceIds = Influence.getValidIds();
+		while (influenceIds.hasNext()) {
+			int id = influenceIds.next();		
+			InfluenceModelViewFactory.getInstance().getView(id).paintConnections(g);	
+		}
+		
+		//First draw all stocks
 		Iterator<Integer> stockIds = Stock.getValidIds();
 		while (stockIds.hasNext()) {
 			int id = stockIds.next();
 			StockModelViewFactory.getInstance().getView(id).paint(g);	
-		}
-		
-		Iterator<Integer> influenceIds = Influence.getValidIds();
+		}	
+	
+		//Then draw all influences
+		influenceIds = Influence.getValidIds();
 		while (influenceIds.hasNext()) {
-			int id = influenceIds.next();
+			int id = influenceIds.next();		
 			InfluenceModelViewFactory.getInstance().getView(id).paint(g);	
 		}
 	}

@@ -3,7 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-
 import view.mouse.ElementDragger;
 
 @SuppressWarnings("serial")
@@ -31,7 +30,7 @@ public class Canvas extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		super.paintComponent(g);	
 		ElementView.paintAll(g);
 	}
 

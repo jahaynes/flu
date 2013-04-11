@@ -29,14 +29,19 @@ public class CreateConnectingInfluence implements Command {
 	@Override
 	public void execute() {
 		influenceId = InfluenceModelViewFactory.getInstance().create();
-		System.out.println("Connected: " + stock1 + " to " + stock2 + " as influenceid " + influenceId);
 		InfluenceModelViewFactory.getInstance().getView(influenceId).setPosition(new Point(left,top));
+		InfluenceModelViewFactory.getInstance().get(influenceId).connectToStock(stock1);
+		InfluenceModelViewFactory.getInstance().get(influenceId).connectToStock(stock2);
+		System.out.println("Connected: " + stock1 + " to " + stock2 + " as influenceid " + influenceId);
+		Canvas.getInstance().repaint();		
 	}
 
 	@Override
 	public void rollback() {
-		System.out.println("Disconnected: " + stock1 + " from " + stock2);
+		InfluenceModelViewFactory.getInstance().get(influenceId).disconnectFromStock(stock1);
+		InfluenceModelViewFactory.getInstance().get(influenceId).disconnectFromStock(stock2);
 		InfluenceModelViewFactory.getInstance().remove(influenceId);
+		System.out.println("Disconnected: " + stock1 + " from " + stock2);
 		Canvas.getInstance().repaint();		
 	}
 }

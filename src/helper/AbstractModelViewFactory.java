@@ -85,14 +85,14 @@ public class AbstractModelViewFactory {
 		Iterator<Integer> stockIterator = StockModelViewFactory.getInstance().getIterator();
 		while(stockIterator.hasNext()) {
 			Element e = StockModelViewFactory.getInstance().get(stockIterator.next());
-			if(/*s != null &&*/ e.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+			if(e.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;
 			}
 		}
 		Iterator<Integer> influenceIterator = InfluenceModelViewFactory.getInstance().getIterator();
 		while(influenceIterator.hasNext()) {
 			Element e = InfluenceModelViewFactory.getInstance().get(influenceIterator.next());
-			if(/*s != null &&*/ e.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
+			if(e.getName().toUpperCase().trim().equals(name.toUpperCase().trim())) {
 				return false;
 			}
 		}
