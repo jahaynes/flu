@@ -48,8 +48,6 @@ public class ElementView extends Draggable {
 	public static void paintAll(Graphics g) {	
 		
 		//First draw all connections
-		
-		//Then draw all influences
 		Iterator<Integer> influenceIds = Influence.getValidIds();
 		while (influenceIds.hasNext()) {
 			int id = influenceIds.next();		

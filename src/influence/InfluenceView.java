@@ -23,7 +23,7 @@ public class InfluenceView extends ElementView {
 		Set<Integer> connectedStocks = InfluenceModelViewFactory.getInstance().get(ownerId).getConnectedStockIds();
 		for(Integer stockId : connectedStocks) {
 			ElementView stockView = AbstractModelViewFactory.getView(ElementType.STOCK, stockId);
-			g.setColor(Color.red);
+			g.setColor(Color.black);
 			g.drawLine(this.left(), this.top(), stockView.left(), stockView.top());	
 		}	
 	}
