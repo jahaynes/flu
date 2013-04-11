@@ -21,6 +21,10 @@ public class CommandHistory  {
 		history.push(command);
 	}
 	
+	public void pushCommandWithoutExecute(Command command) {
+		history.push(command);
+	}
+	
 	//TODO: put rollback-only stuff in here like MOVE
 	//public void alreadyDidCommand()
 	

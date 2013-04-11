@@ -8,6 +8,8 @@ import java.util.List;
 import commands.CommandHistory;
 import commands.CreateConnectingInfluence;
 import commands.DuplicateStockCommand;
+import commands.MoveViewCommand;
+import decorations.Margins;
 import explorer.Explorer;
 import view.Canvas;
 import view.ElementView;
@@ -29,6 +31,8 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	private DragType currentDragType = DragType.NOTHING;
 
 	private int sourceStockId;
+	
+	private MoveViewCommand currentMoveCommand;
 
 	public static synchronized ElementDragger getInstance(final Canvas owner) {
 		if (instance == null) {
@@ -46,6 +50,12 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		assert pressedPoint != null;
 		if (held != null) {
 
+			//Push the move-rollback command as soon as started dragging, but only once
+			if(currentMoveCommand != null) {
+				CommandHistory.getInstance().pushCommandWithoutExecute(currentMoveCommand);
+				currentMoveCommand = null;
+			}
+			
 			int dx = m.getX() - pressedPoint.x;
 			int dy = m.getY() - pressedPoint.y;
 
@@ -97,7 +107,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			} else if (Keyboard.isAltDown()) {
 				startConnection(m, selectedStock);
 			} else {
-				startMove(ElementType.STOCK, m, selectedStock);
+				startMove(ElementType.STOCK, m, selectedStock, false);
 			}
 		} else if (true) {
 			List<Integer> pressedInfluenceIds = ElementView.influenceViewsUnderMouse(pressedPoint);
@@ -108,7 +118,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 				} else if (Keyboard.isAltDown()) {
 					//No influence action for now
 				} else {
-					startMove(ElementType.INFLUENCE, m, selectedInf);
+					startMove(ElementType.INFLUENCE, m, selectedInf, false);
 				}
 			} else {
 				Explorer.getInstance().clearSelected();
@@ -161,10 +171,17 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 		DuplicateStockCommand command = new DuplicateStockCommand(selectedId);
 		CommandHistory.getInstance().doCommand(command);
 		int newId = command.getNewId();
-		startMove(elementType, m, newId);
+		startMove(elementType, m, newId, true);
 	}
 
-	private void startMove(ElementType elementType, MouseEvent m, int selectedId) {
+	private void startMove(ElementType elementType, MouseEvent m, int selectedId, boolean wasDuplicated) {	
+		
+		if(!wasDuplicated) {
+			//Prepare the move command (for rollback purposes only -- don't execute.  Don't push it until drag happens)
+			ElementView view = AbstractModelViewFactory.getView(elementType, selectedId);		
+			currentMoveCommand = new MoveViewCommand(elementType, selectedId, new Point(view.left() - Margins.STOCKVIEWLEFTMARGIN, view.top() - Margins.STOCKVIEWTOPMARGIN));
+		}
+		
 		currentDragType = DragType.MOVE;
 		held = AbstractModelViewFactory.getView(elementType, selectedId);		
 		held.setHoldPosition();
