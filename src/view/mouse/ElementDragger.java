@@ -105,18 +105,18 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			int selectedStock = pressedStockIds.get(0);
 			if (Keyboard.isCtrlDown()) {
 				startClone(ElementType.STOCK, m, selectedStock);
-			} else if (Keyboard.isAltDown()) {
+			} else if (Keyboard.isShiftDown()) {
 				startConnection(m, selectedStock);
 			} else {
 				startMove(ElementType.STOCK, m, selectedStock, false);
 			}
-		} else if (true) {
+		} else {
 			List<Integer> pressedInfluenceIds = ElementView.influenceViewsUnderMouse(pressedPoint);
 			if (pressedInfluenceIds.size() > 0) {
 				int selectedInf = pressedInfluenceIds.get(0);
 				if (Keyboard.isCtrlDown()) {
 					//startClone(ElementType.INFLUENCE, m, selectedInf);
-				} else if (Keyboard.isAltDown()) {
+				} else if (Keyboard.isShiftDown()) {
 					//No influence action for now
 				} else {
 					startMove(ElementType.INFLUENCE, m, selectedInf, false);
