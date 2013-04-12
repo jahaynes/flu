@@ -1,5 +1,7 @@
 package helper;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,5 +99,26 @@ public class AbstractModelViewFactory {
 			}
 		}
 		return true;
+	}
+
+	public static List<Point> getAllPositionsExcept(ElementType elementType, int elementId) {
+		List<Point> results = new ArrayList<Point>();
+		StockModelViewFactory stocks = StockModelViewFactory.getInstance();
+		Iterator<Integer> stockIds = stocks.getIterator();
+		while(stockIds.hasNext()) {
+			Integer nextId = stockIds.next();
+			if(elementId != nextId || elementType != ElementType.STOCK) {
+				results.add(stocks.getView(nextId).getPosition());
+			}
+		}	
+		InfluenceModelViewFactory influences = InfluenceModelViewFactory.getInstance();
+		Iterator<Integer> influenceIds = influences.getIterator();
+		while(influenceIds.hasNext()) {
+			Integer nextId = influenceIds.next();
+			if(elementId != nextId || elementType != ElementType.INFLUENCE) {
+				results.add(influences.getView(nextId).getPosition());
+			}
+		}
+		return results;
 	}	
 }

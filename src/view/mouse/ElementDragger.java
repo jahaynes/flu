@@ -33,6 +33,8 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	
 	private MoveViewCommand currentMoveCommand;
 
+	private List<Point> snapPositions;
+	
 	public static synchronized ElementDragger getInstance(final Canvas owner) {
 		if (instance == null) {
 			instance = new ElementDragger(owner);
@@ -58,7 +60,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			int dx = m.getX() - pressedPoint.x;
 			int dy = m.getY() - pressedPoint.y;
 
-			held.addToHeldPosition(dx, dy);
+			held.addToHeldPosition(dx, dy, snapPositions);
 			owner.repaint(); // TODO optimize this
 		}
 	}
@@ -128,6 +130,8 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseReleased(MouseEvent m) {
 
+		snapPositions = null;
+		
 		switch (currentDragType) {
 		case CLONE:
 			break;
@@ -174,6 +178,9 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 	}
 
 	private void startMove(ElementType elementType, MouseEvent m, int selectedId, boolean wasDuplicated) {	
+		
+		//TODO: Get a list of all Points from all (non-this) elements to use in snapping
+		snapPositions = AbstractModelViewFactory.getAllPositionsExcept(elementType, selectedId);
 		
 		if(!wasDuplicated) {
 			//Prepare the move command (for rollback purposes only -- don't execute.  Don't push it until drag happens)
