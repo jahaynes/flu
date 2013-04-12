@@ -29,7 +29,7 @@ public class InfluenceModelViewFactory extends AbstractModelViewFactory {
 		int nextId = super.create();
 		String name = "INFLUENCE " + nextId;
 		allElements.set(nextId, new Influence(name));
-		allViews.set(nextId, new InfluenceView(name, nextId));
+		allViews.set(nextId, new InfluenceView(name));
 		usedIds.add(nextId);
 		return nextId;
 	}

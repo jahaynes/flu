@@ -27,7 +27,7 @@ public class Influence extends Element {
 	public void disconnectFromStock(int stockId) {
 		connectedStockIds.remove(stockId);
 	}
-
+	
 	public Set<Integer> getConnectedStockIds() {
 		return connectedStockIds;
 	}

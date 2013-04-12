@@ -131,4 +131,15 @@ public class ElementView extends Draggable {
 		return position;
 	}
 	
+	//TODO
+	/*public Point getClosestBorderPointTo(Point other) {
+		
+		Point[] possiblePoints = new Point[4];
+		
+		
+		
+		
+		
+	}*/
+	
 }

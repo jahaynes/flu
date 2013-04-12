@@ -1,7 +1,6 @@
 package commands;
 
 import java.awt.Point;
-
 import view.Canvas;
 import helper.InfluenceModelViewFactory;
 import helper.StockModelViewFactory;
@@ -27,20 +26,25 @@ public class CreateConnectingInfluence implements Command {
 	
 	@Override
 	public void execute() {
-		influenceId = InfluenceModelViewFactory.getInstance().create();
-		InfluenceModelViewFactory.getInstance().getView(influenceId).setPosition(new Point(x,y));
-		InfluenceModelViewFactory.getInstance().get(influenceId).connectToStock(stock1);
-		InfluenceModelViewFactory.getInstance().get(influenceId).connectToStock(stock2);
+		InfluenceModelViewFactory factory = InfluenceModelViewFactory.getInstance();
+		influenceId = factory.create();
+		factory.getView(influenceId).setPosition(new Point(x,y));
+		factory.get(influenceId).connectToStock(stock1);
+		factory.get(influenceId).connectToStock(stock2);
+		factory.getView(influenceId).setConnectedStocks(factory.get(influenceId).getConnectedStockIds());
 		System.out.println("Connected: " + stock1 + " to " + stock2 + " as influenceid " + influenceId);
 		Canvas.getInstance().repaint();		
 	}
 
 	@Override
 	public void rollback() {
-		InfluenceModelViewFactory.getInstance().get(influenceId).disconnectFromStock(stock1);
-		InfluenceModelViewFactory.getInstance().get(influenceId).disconnectFromStock(stock2);
-		InfluenceModelViewFactory.getInstance().remove(influenceId);
+		InfluenceModelViewFactory factory = InfluenceModelViewFactory.getInstance();
+		factory.get(influenceId).disconnectFromStock(stock1);
+		factory.get(influenceId).disconnectFromStock(stock2);
+		factory.getView(influenceId).setConnectedStocks(factory.get(influenceId).getConnectedStockIds());
+		factory.remove(influenceId);
 		System.out.println("Disconnected: " + stock1 + " from " + stock2);
 		Canvas.getInstance().repaint();		
 	}
+	
 }
