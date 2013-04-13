@@ -61,6 +61,9 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			int dy = m.getY() - pressedPoint.y;
 
 			held.addToHeldPosition(dx, dy, snapPositions);
+			
+			//InfluenceView.updateAnchorsForAll();  //TODO optimize this
+			
 			owner.repaint(); // TODO optimize this
 		}
 	}
@@ -139,10 +142,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 			pressedPoint = m.getPoint();
 			List<Integer> pressedInfluenceIds = ElementView.influenceViewsUnderMouse(pressedPoint);
 			if (pressedInfluenceIds.size() > 0) {
-				/*Integer firstPressed = pressedInfluenceIds.get(0);
-				CommandHistory.getInstance().doCommand(
-						new CreateConnectingInfluence(sourceStockId,
-								firstPressed));*/ //No influences for now
+
 			} else {
 				List<Integer> pressedStockIds = ElementView.stockViewsUnderMouse(pressedPoint);
 				if (pressedStockIds.size() > 0) {

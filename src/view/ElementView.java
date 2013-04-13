@@ -64,7 +64,7 @@ public class ElementView extends Draggable {
 			StockModelViewFactory.getInstance().getView(id).paint(g);	
 		}	
 	
-		//Then draw all influences
+		//Then draw all influences (and their anchors)
 		influenceIds = Influence.getValidIds();
 		while (influenceIds.hasNext()) {
 			int id = influenceIds.next();		
@@ -111,11 +111,11 @@ public class ElementView extends Draggable {
 		return position.y - (_height >> 1) - Margins.STOCKVIEWTOPPADDING;
 	}
 	
-	private int right() {
+	public int right() {
 		return left() + width();
 	}
 	
-	private int bottom() {
+	public int bottom() {
 		return top() + height();
 	}
 	
