@@ -1,5 +1,7 @@
 package main;
-import helper.StockModelViewFactory;
+import commands.CommandHistory;
+import commands.CreateCommand;
+import helper.ElementType;
 import view.Window;
 
 public class Main {
@@ -12,10 +14,12 @@ public class Main {
 		//each module will be represented by an 'entry state' and 'exit state' (amount and unit) which can be used in higher level modelling
 		//additions to the module will flow into entry, and subtractions will leave the exit
 		
-		//Test data
-		StockModelViewFactory.getInstance().create();
-		StockModelViewFactory.getInstance().create();
-		StockModelViewFactory.getInstance().create();
+		//Test data	
+		CommandHistory.getInstance().doCommand(new CreateCommand(ElementType.STOCK));
+		CommandHistory.getInstance().doCommand(new CreateCommand(ElementType.STOCK));
+		CommandHistory.getInstance().doCommand(new CreateCommand(ElementType.STOCK));
+		
+		
 	}
 
 }

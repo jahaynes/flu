@@ -13,7 +13,7 @@ import view.ElementView;
 public class InfluenceView extends ElementView {
 
 	private Set<Integer> connectedStocks;
-	private List<Point> anchorPoints = new ArrayList<Point>();
+	private List<AnchorView> anchorPoints = new ArrayList<AnchorView>();
 	
 	public InfluenceView(String name) {
 		super(name);
@@ -21,16 +21,32 @@ public class InfluenceView extends ElementView {
 	
 	public void setConnectedStocks(Set<Integer> connectedStocks) {
 		this.connectedStocks = connectedStocks;
-		updateNearestAnchors();
+		rebuildAnchors();
+		updateAnchors();
 	}
 	
+	public void rebuildAnchors() {
+		anchorPoints.clear();
+		for(Integer stockId : connectedStocks) {
+			anchorPoints.add(new AnchorView(
+					this.position, 
+					AbstractModelViewFactory.getView(ElementType.STOCK, stockId)
+					));
+		}
+	}
+	
+	public void updateAnchors() {
+		for(AnchorView anchor : anchorPoints) {
+			anchor.update();
+		}
+	}
+
 	@Override
 	public void paint(Graphics g) {		
 		super.paint(g);
-	/*	for(Point anchorPoint : anchorPoints) {
-			g.setColor(Color.green);
-			g.fillOval(anchorPoint.x-4, anchorPoint.y-4, 8, 8);
-		}*/
+		for(AnchorView anchor : anchorPoints) {
+			anchor.paint(g);
+		}
 	}
 	
 	public void paintConnections(Graphics g) {
@@ -58,7 +74,7 @@ public class InfluenceView extends ElementView {
 		}*/
 	}
 	
-	public void updateNearestAnchors() {
+	/*public void updateNearestAnchors() {
 		anchorPoints.clear();	
 		for(int targetStock : connectedStocks) {
 			
@@ -97,11 +113,11 @@ public class InfluenceView extends ElementView {
 			}
 			anchorPoints.add(bestPoint);
 		}	
-	}
+	}*/
 
-	private boolean closerToThisThan(Point point, Point bestPoint) {
+	/*private boolean closerToThisThan(Point point, Point bestPoint) {
 		int manDist1 = Math.abs(point.x - position.x) + Math.abs(point.y - position.y);
 		int manDist2 = Math.abs(bestPoint.x - position.x) + Math.abs(bestPoint.y - position.y);
 		return manDist1 < manDist2;
-	}
+	}*/
 }
