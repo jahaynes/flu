@@ -12,21 +12,21 @@ public class AnchorView {
 	private Point sourcePoint;
 	private ElementView destView;
 	
-	private Point[] graphicalPoint = new Point[4];
+	private Point graphicalPoint = new Point(-1,-1);
+	private Point[] possiblePoints = new Point[4];
 	
 	public AnchorView(Point sourcePoint, ElementView destView) {
 		this.sourcePoint = sourcePoint;
 		this.destView = destView;
+		for(int i=0;i<4;i++) {
+			possiblePoints[i] = new Point(-1,-1);
+		}
 		update();
 	}
 	
 	public void paint(Graphics g) {
 		g.setColor(Color.green);
-		for(Point p : graphicalPoint) {
-			if(p != null) {
-				g.fillOval(p.x-4, p.y-4, 8, 8);
-			}
-		}
+		g.fillOval(graphicalPoint.x-4, graphicalPoint.y-4, 8, 8);
 	}
 	
 	public void update() {
@@ -41,11 +41,30 @@ public class AnchorView {
 		float testTop = (destView.top() - y0) / dy;
 		float testBottom = (destView.bottom() - y0) / dy;
 		
+		//System.out.println(testLeft);
+		//System.out.println(testRight);
+		//System.out.println(testTop);
+		//System.out.println(testBottom);
+		
+		testLeft = (testLeft >= 1.0f) ? 0.0f : testLeft;
+		testRight = (testRight >= 1.0f) ? 0.0f : testRight;
+		testTop = (testTop >= 1.0f) ? 0.0f : testTop;
+		testBottom = (testBottom >= 1.0f) ? 0.0f : testBottom;
+		
 		//Equation is [x] = [x0] + t[dx]
-		graphicalPoint[0] = new Point((int)(x0 + testLeft * dx), (int)(y0 + testLeft * dy));	
-		graphicalPoint[1] = new Point((int)(x0 + testRight * dx), (int)(y0 + testRight * dy));	
-		graphicalPoint[2] = new Point((int)(x0 + testTop * dx), (int)(y0 + testTop * dy));	
-		graphicalPoint[3] = new Point((int)(x0 + testBottom * dx), (int)(y0 + testBottom * dy));	
+		possiblePoints[0].setLocation((int)(x0 + testLeft * dx), (int)(y0 + testLeft * dy));
+		possiblePoints[1].setLocation((int)(x0 + testRight * dx), (int)(y0 + testRight * dy));	
+		possiblePoints[2].setLocation((int)(x0 + testTop * dx), (int)(y0 + testTop * dy));	
+		possiblePoints[3].setLocation((int)(x0 + testBottom * dx), (int)(y0 + testBottom * dy));	
+		
+		for(Point p : possiblePoints) {
+			if(
+			   (p.x == destView.left() || p.x == destView.right())
+		    && (p.y == destView.top() || p.y == destView.bottom())
+		    ) {
+				graphicalPoint = p;
+				break;
+			}
+		}
 	}
-	
 }

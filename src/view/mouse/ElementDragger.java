@@ -1,5 +1,7 @@
 package view.mouse;
 
+import influence.InfluenceView;
+
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -62,7 +64,7 @@ public class ElementDragger implements MouseListener, MouseMotionListener {
 
 			held.addToHeldPosition(dx, dy, snapPositions);
 			
-			//InfluenceView.updateAnchorsForAll();  //TODO optimize this
+			InfluenceView.updateAnchorsForAll();  //TODO optimize this
 			
 			owner.repaint(); // TODO optimize this
 		}
